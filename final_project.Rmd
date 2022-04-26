@@ -122,9 +122,8 @@ boxplot(TEMPHOME ~ HOUSEHOLDER_RACE, data = cleanRECS, col = as.factor(cleanRECS
   
 #This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and race. 
 
-data <- read.csv("C:/Users/elain/Desktop/Data Exploration/ENV757/recs2015_public_v4.csv")
 
-data <- data[c("KWH", "MONEYPY", "HOUSEHOLDER_RACE")]
+data <- recs[c("KWH", "MONEYPY", "HOUSEHOLDER_RACE")]
 dim(data)
 
 #Exploratory Data Analysis
