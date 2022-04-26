@@ -101,3 +101,76 @@ boxplot(TEMPHOMEAC ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGION
 ```
 
 
+
+
+```{r}
+## ANCOVA - Analysis of Covariance - ELAINE
+  
+#This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and race. 
+
+data <- read.csv("C:/Users/elain/Desktop/Data Exploration/ENV757/recs2015_public_v4.csv")
+
+data <- data[c("KWH", "MONEYPY", "HOUSEHOLDER_RACE")]
+dim(data)
+
+#Exploratory Data Analysis
+
+attach(data)
+boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
+boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
+hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
+
+
+#Data Cleaning 
+
+library(car)
+data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
+data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
+data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
+
+
+```
+
+## Exploratory Data Analysis 
+```{r}
+
+attach(data)
+boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
+boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
+hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
+
+
+
+```
+
+##Data Cleaning
+```{r}
+#Data Cleaning 
+
+library(car)
+data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
+data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
+data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
+```
+
+
+## Assumption Verification
+
+The following assumptions must be met in order to proceed with an ANCOVA analysis: the dependent variables should be normally distributed, data should have approximately the same variance
+
+```{r}
+#Variances
+stdev1 <- tapply(KWH, MONEYPY, sd)
+round(max(stdev1)/min(stdev1),1)
+
+stdev2 <- tapply(KWH, HOUSEHOLDER_RACE, sd)
+max(stdev2)/min(stdev2)
+
+
+#
+m1 <- lm(KWH ~ MONEYPY, data = data)
+
+```
+
+
+
