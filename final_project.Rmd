@@ -97,8 +97,6 @@ boxplot(TEMPHOME ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY)
 
 boxplot(DOLLAREL ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
 
-boxplot()
-
 boxplot(TEMPHOME ~ SCALEB, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
 
 plot(jitter(TEMPHOME, factor = .5) ~ MONEYPY, data = cleanRECS, col = "dark green", pch = 19)
@@ -180,8 +178,6 @@ round(max(stdev1)/min(stdev1),1)
 stdev2 <- tapply(KWH, HOUSEHOLDER_RACE, sd)
 max(stdev2)/min(stdev2)
 
-
-#
 m1 <- lm(KWH ~ MONEYPY, data = data)
 
 ```
