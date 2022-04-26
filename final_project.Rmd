@@ -31,7 +31,7 @@ head(recs)
 #selecting columns we care about 
 
 #WE NEED TO DECIDE WHAT WE WANT TO DO ABOUT IMPUTATION 
-recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC")])
+recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
 
 #getting rid of "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
 cleanRECS <- recs1[recs1$THERMAIN != "-2" & recs1$PROTHERM != "-2" & recs1$THERMAINAC != "-2" & recs1$PROTHERMAC != "-2",]
@@ -53,6 +53,8 @@ cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
                                '8' = 'Mountain North';
                                '9' = 'Mountain South';
                                '10'= 'Pacific'"))
+
+
 
 ```
 
@@ -89,13 +91,25 @@ You can also embed plots, for example:
 
 ```{r}
 
-boxplot(TEMPHOME$cleanRECS ~ MONEYPY$cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+boxplot(TEMPHOME ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+
+boxplot(DOLLAREL ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+
+boxplot()
+
+boxplot(TEMPHOME ~ SCALEB, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+
+plot(jitter(TEMPHOME, factor = .5) ~ MONEYPY, data = cleanRECS, col = "dark green", pch = 19)
 
 boxplot(TEMPHOMEAC ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
 
 boxplot(TEMPHOME ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
 
 boxplot(TEMPHOMEAC ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+
+boxplot(TEMPHOME ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+
+boxplot(TEMPHOME ~ HOUSEHOLDER_RACE, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
 ```
 
 
