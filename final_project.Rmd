@@ -7,6 +7,14 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(car)
+library(leaps)
+library(lubridate)
+library(rvest)
+library(olsrr)
+library(corrplot)
+library(leaps)
 ```
 
 ## Loading Data 
@@ -28,8 +36,26 @@ recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNR
 #getting rid of "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
 cleanRECS <- recs1[recs1$THERMAIN != "-2" & recs1$PROTHERM != "-2" & recs1$THERMAINAC != "-2" & recs1$PROTHERMAC != "-2",]
 
+cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC, 
+                              "'1' = 'Northeast';
+                               '2' = 'Midwest';
+                               '3' = 'South'; 
+                               '4' = 'West'"))
+
+cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION, 
+                              "'1' = 'New England';
+                               '2' = 'Mid Atlantic';
+                               '3' = 'East North Central'; 
+                               '4' = 'West North Central';
+                               '5' = 'South Atlantic';
+                               '6' = 'East South Central';
+                               '7' = 'West South Central';
+                               '8' = 'Mountain North';
+                               '9' = 'Mountain South';
+                               '10'= 'Pacific'"))
 
 ```
+
 
 #Columns we care about: 
 
@@ -61,8 +87,15 @@ TEMPHOMEAC (summer temp when people are home)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+
+boxplot(TEMPHOME$cleanRECS ~ MONEYPY$cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+
+boxplot(TEMPHOMEAC ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+
+boxplot(TEMPHOME ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+
+boxplot(TEMPHOMEAC ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
