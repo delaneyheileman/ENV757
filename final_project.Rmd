@@ -186,5 +186,10 @@ m1 <- lm(KWH ~ MONEYPY, data = data)
 
 ```
 
+```{r}
+
+#LIAMS CODE AREA <3
+
+```
 
 
