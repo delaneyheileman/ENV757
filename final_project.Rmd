@@ -9,17 +9,55 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Loading Data 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+#Setting working directory 
+setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+#Loading CSV 
+recs <- read.csv("recs2015_public_v4.csv")
+dim(recs)
+head(recs)
 
-```{r cars}
-summary(cars)
+#selecting columns we care about 
+
+#WE NEED TO DECIDE WHAT WE WANT TO DO ABOUT IMPUTATION 
+recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC")])
+
+#getting rid of "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
+cleanRECS <- recs1[recs1$THERMAIN != "-2" & recs1$PROTHERM != "-2" & recs1$THERMAINAC != "-2" & recs1$PROTHERMAC != "-2",]
+
+
 ```
 
-## Including Plots
+#Columns we care about: 
+
+MONEYPY (Annual income)
+
+ENERGYASST (participated in home energy assitnce program)
+
+REGIONC (region)
+
+DIVISION (census region)
+
+KOWNRENT
+
+THERMAIN (any thermostats)
+
+PROTHERM (programable therm)
+
+TEMPHOME (Temp in winter when someone is home)
+
+AIRCOND(air conditioner used y/n)
+
+CENACHP (heat pump y/n)
+
+THERMAINAC (Thermostat for air conditioner)
+
+PROTHERMAC (programable therm for air coniditoner)
+
+TEMPHOMEAC (summer temp when people are home)
 
 You can also embed plots, for example:
 
