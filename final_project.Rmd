@@ -54,7 +54,9 @@ cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
                                '9' = 'Mountain South';
                                '10'= 'Pacific'"))
 
-
+cleanRECS$HOUSEHOLDER_RACE <- recs(recs$HOUSEHOLDER_RACE, "7 = '5'")
+cleanRECS$HOUSEHOLDER_RACE <- recs(recs$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
+cleanRECS$MONEYPY <- recs(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
 
 ```
 
@@ -126,22 +128,6 @@ boxplot(TEMPHOME ~ HOUSEHOLDER_RACE, data = cleanRECS, col = as.factor(cleanRECS
 data <- recs[c("KWH", "MONEYPY", "HOUSEHOLDER_RACE")]
 dim(data)
 
-#Exploratory Data Analysis
-
-attach(data)
-boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
-hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
-
-
-#Data Cleaning 
-
-library(car)
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
-data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
-
-
 ```
 
 ## Exploratory Data Analysis 
@@ -158,12 +144,9 @@ hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "
 
 ##Data Cleaning
 ```{r}
-#Data Cleaning 
-
-library(car)
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
-data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
+recs$HOUSEHOLDER_RACE <- recs(data$HOUSEHOLDER_RACE, "7 = '5'")
+recs$HOUSEHOLDER_RACE <- recs(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
+recs$MONEYPY <- recs(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
 ```
 
 
@@ -185,25 +168,6 @@ m1 <- lm(KWH ~ MONEYPY, data = data)
 
 ```
 
-```{r}
-##FROM CLASS 19
-#Creating the linear model
-###lm1 <- lm(MEGAWATT_HOURS ~ HOUSEHOLD_INCOME*CLIMATE_REGION, data = x)
-###coefs <- round(coef(lm1), 2)
 
-#Ploting the model
-###plot(MEGAWATT_HOURS ~ HOUSEHOLD_INCOME,
-     ###data = x,
-     ###col = factor(CLIMATE_REGION), 
-     ###pch = 16,
-     ###cex = .5)
-###legend("topleft", col = 1:5, legend = levels(factor(x$CLIMATE_REGION)), pch = 16)
-
-#Plotting the different best fit lines
-###abline(a = coefs[1], b = coefs[2], col = "black", lwd = 3)
-###for (i in 3:6){
-  ###abline(a = coefs[1] + coefs[i], b = coefs[2] + coefs[i+4], col = (i-1), lwd = 3)
-###}
-```
 
 
