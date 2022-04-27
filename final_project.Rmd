@@ -37,58 +37,60 @@ dim(recs)
 head(recs)
 
 #Selecting columns we care about 
-recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
+recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION","UATYP10", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
 
 #Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
 cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
 
-View(cleanRECS)
+cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
+                             '1' = 'Northeast',
+                             '2' = 'Midwest',
+                             '3' = 'South',
+                             '4' = 'West'))
 
-#cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC, 
-#                              "'1' = 'Northeast';
-#                               '2' = 'Midwest';
-#                               '3' = 'South'; 
-#                               '4' = 'West'"))
+#Changing C (suburban areas) into Urban
+cleanRECS$UATYP10 <- recode(cleanRECS$UATYP10, 'C' = 'U')
 
-#cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION, 
-#                              "'1' = 'New England';
-                               # '2' = 'Mid Atlantic';
-                               # '3' = 'East North Central'; 
-                               # '4' = 'West North Central';
-                               # '5' = 'South Atlantic';
-                               # '6' = 'East South Central';
-                               # '7' = 'West South Central';
-                               # '8' = 'Mountain North';
-                               # '9' = 'Mountain South';
-                               # '10'= 'Pacific'"))
 
+
+cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
+                              '1' = 'New England',
+                              '2' = 'Mid Atlantic',
+                              '3' = 'East North Central',
+                              '4' = 'West North Central',
+                              '5' = 'South Atlantic',
+                              '6' = 'East South Central',
+                              '7' = 'West South Central',
+                              '8' = 'Mountain North',
+                              '9' = 'Mountain South',
+                              '10'= 'Pacific'))
 
 #Why are we doing this? Not obvious
-cleanRECS$HOUSEHOLDER_RACE <- recode(cleanRECS$HOUSEHOLDER_RACE, 
-                                   "7 = '5'")
+cleanRECS$HOUSEHOLDER_RACE <- as.factor(recode(cleanRECS$HOUSEHOLDER_RACE,
+                                   '7' = '5'))
 
-cleanRECS$HOUSEHOLDER_RACE <- recode(cleanRECS$HOUSEHOLDER_RACE, 
-                                   "1 = 'White';
-                                    2 = 'Black/Afr.American';
-                                    3 = 'Native American';
-                                    4 = 'Asian';
-                                    5 = 'Other'")
+cleanRECS$HOUSEHOLDER_RACE <- recode(cleanRECS$HOUSEHOLDER_RACE,
+                                   '1' = 'White',
+                                   '2' = 'Black/Afr.American',
+                                   '3' = 'Native American',
+                                   '4' = 'Asian',
+                                   '5' = 'Other')
 
-cleanRECS$MONEYPY <- recode(cleanRECS$MONEYPY, 
-                          "1 = '1 - 20k';
-                           2 = '2 - 40k';
-                           3 = '3 - 60k';
-                           4 = '4 - 80k';
-                           5 = '5 - 100k';
-                           6 = '6 - 120k';
-                           7 = '7 - 140k';
-                           8 = '8 - 140k+'")
-
-cleanRECS$CENACHP <- recode(cleanRECS$CENACHP, 
-                           "1 = 'YES';
-                            0 = 'NO'")
+cleanRECS$MONEYPY <- recode(cleanRECS$MONEYPY,
+                           '1' = '1 - 20k',
+                           '2' = '2 - 40k',
+                           '3' = '3 - 60k',
+                           '4' = '4 - 80k',
+                           '5' = '5 - 100k',
+                           '6' = '6 - 120k',
+                           '7' = '7 - 140k',
+                           '8' = '8 - 140k+')
 
 
+cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
+                            '1' = 'YES',
+                            '0' = 'NO')
+#Why are we doing this? Not obvious
 table(recs1$AIRCOND)
 table(recs1$THERMAIN)
 table(cleanRECS$THERMAINAC)
@@ -97,40 +99,14 @@ table(cleanRECS$PROTHERMAC)
 table(cleanRECS$AIRCOND)
 ```
 
-
-#Columns we care about: 
-
-MONEYPY (Annual income)
-
-ENERGYASST (participated in home energy assitnce program)
-
-REGIONC (region)
-
-DIVISION (census region)
-
-KOWNRENT
-
-THERMAIN (any thermostats)
-
-PROTHERM (programable therm)
-
-TEMPHOME (Temp in winter when someone is home)
-
-AIRCOND(air conditioner used y/n)
-
-CENACHP (heat pump y/n)
-
-THERMAINAC (Thermostat for air conditioner)
-
-PROTHERMAC (programable therm for air coniditoner)
-
-TEMPHOMEAC (summer temp when people are home)
-
-TES TES TEST
-MY TES TEST TEST 
-You can also embed plots, for example:
-
 ```{r}
+
+boxplot(KWH ~ ENERGYASST , data = cleanRECS, col = as.factor(cleanRECS$KWH))
+
+table(cleanRECS$ENERGYASST, cleanRECS$REGIONC)
+table(cleanRECS$ENERGYASST, cleanRECS$HOUSEHOLDER_RACE)
+
+t.test(KWH ~ ENERGYASST, data = cleanRECS)
 
 boxplot(TEMPHOME ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
 
@@ -181,8 +157,6 @@ boxplot(KWH ~ CENACHP, data = ancmod, col = "yellow", xlab = "Thermostat")
 dim(ancmod)
 
 ```
-
-
 
 
 ## Assumption Verification
