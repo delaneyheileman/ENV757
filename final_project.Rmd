@@ -90,6 +90,10 @@ cleanRECS$MONEYPY <- recode(cleanRECS$MONEYPY,
 cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
                             '1' = 'YES',
                             '0' = 'NO')
+#recoding energy assitance variable to yes or no value
+cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
+                            '1' = 'YES',
+                            '0' = 'NO')
 #Why are we doing this? Not obvious
 table(recs1$AIRCOND)
 table(recs1$THERMAIN)
@@ -99,32 +103,67 @@ table(cleanRECS$PROTHERMAC)
 table(cleanRECS$AIRCOND)
 ```
 
+## DATA AND DATA CLEANING WRITE UP 
+
+blah blah blah 
+
+this is what we used ______ and the units were _____ 
+
+clean was hard for x y and z reason 
+
 ```{r}
+#boxplot of kilo watt hours based on area 
+boxplot(KWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$KWH), xlab = "Rural or Urban")
 
-boxplot(KWH ~ ENERGYASST , data = cleanRECS, col = as.factor(cleanRECS$KWH))
+#adding column for log KWH values
+cleanRECS$logKWH <- log(cleanRECS$KWH)
 
-table(cleanRECS$ENERGYASST, cleanRECS$REGIONC)
-table(cleanRECS$ENERGYASST, cleanRECS$HOUSEHOLDER_RACE)
+#boxploot of log valeus 
+boxplot(logKWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural or Urban")
 
-t.test(KWH ~ ENERGYASST, data = cleanRECS)
+#WHY IS THIS DOING THIS!!!!!!!
 
-boxplot(TEMPHOME ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+#t.test of KWH and region type 
+(test1 <- t.test(logKWH ~ UATYP10, data = cleanRECS, conf.level = .95))
 
-boxplot(DOLLAREL ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+##This is where bootstrapping starts! 
 
-boxplot(TEMPHOME ~ SCALEB, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+set.seed(230)
 
-plot(jitter(TEMPHOME, factor = .5) ~ MONEYPY, data = cleanRECS, col = "dark green", pch = 19)
+N <- 10000
+sR <- rep(NA, N)
+sU <- rep(NA, N)
+diffvals <- rep(NA, N)
 
-boxplot(TEMPHOMEAC ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+for (i in 1:N) {
+  sR <- sample(cleanRECS$logKWH[cleanRECS$UATYP10 == "R"],
+               sum(cleanRECS$UATYP10 == "R"), replace = TRUE)
 
-boxplot(TEMPHOME ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+  sU <- sample(cleanRECS$logKWH[cleanRECS$UATYP10 == "U"],
+               sum(cleanRECS$UATYP10 == "U"), replace = TRUE)
+diffvals[i] <- mean(log(sR)) - mean(log(sU))
 
-boxplot(TEMPHOMEAC ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+}
 
-boxplot(TEMPHOME ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+ci <- quantile(diffvals, c(0.025, 0.975))
+round(ci, 2)
 
-boxplot(TEMPHOME ~ HOUSEHOLDER_RACE, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+hist(diffvals, 
+     col = "blue", 
+     main = "Bootstrapped Sample Means Diff in KiloWattHours", 
+     xlab = "", 
+     breaks = 50, 
+     xlim = c(0.03, 1))
+
+#Add lines to histogram for CI's
+abline(v = ci, lwd=3, col="red")
+abline(v = test1$conf.int, lwd = 3, col = "green", lty = 2)
+legend("topleft", 
+       c("Original CI","Boot CI"), 
+       lwd = 3, 
+       col = c("green","red"), 
+       lty = c(2,1))
+
 ```
 
 
