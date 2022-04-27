@@ -15,14 +15,19 @@ library(rvest)
 library(olsrr)
 library(corrplot)
 library(leaps)
+library(tidyverse)
+library(ggplot2)
+source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
+
 ```
 
 ## Loading Data 
 
 ```{r}
 #Setting working directory 
-setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")
-
+#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")
+#setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+setwd("/Users/elain/Documents/GitHub/ENV757")
 #Loading CSV 
 recs <- read.csv("recs2015_public_v4.csv")
 dim(recs)
@@ -32,10 +37,8 @@ head(recs)
 
 #WE NEED TO DECIDE WHAT WE WANT TO DO ABOUT IMPUTATION 
 recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
-
 #getting rid of "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
-cleanRECS <- recs1[recs1$THERMAIN != "-2" & recs1$PROTHERM != "-2" & recs1$THERMAINAC != "-2" & recs1$PROTHERMAC != "-2",]
-
+cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$PROTHERM != "-2" & recs1$THERMAINAC != "-2" & recs1$PROTHERMAC != "-2",]
 cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC, 
                               "'1' = 'Northeast';
                                '2' = 'Midwest';
@@ -54,8 +57,34 @@ cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
                                '9' = 'Mountain South';
                                '10'= 'Pacific'"))
 
+cleanRECS$HOUSEHOLDER_RACE <- recode(cleanRECS$HOUSEHOLDER_RACE, 
+                                   "7 = '5'")
+cleanRECS$HOUSEHOLDER_RACE <- recode(cleanRECS$HOUSEHOLDER_RACE, 
+                                   "1 = 'White';
+                                   2 = 'Black/Afr.American';
+                                   3 = 'Native American';
+                                   4 = 'Asian';
+                                   5 = 'Other'")
+cleanRECS$MONEYPY <- recode(cleanRECS$MONEYPY, 
+                          "1 = '1 - 20k';
+                          2 = '2 - 40k';
+                          3 = '3 - 60k';
+                          4 = '4 - 80k';
+                          5 = '5 - 100k';
+                          6 = '6 - 120k';
+                          7 = '7 - 140k';
+                          8 = '8 - 140k+'")
+cleanRECS$CENACHP <- recode(cleanRECS$CENACHP, 
+                           "1 = 'YES';
+                           0 = 'NO'")
 
 
+table(recs1$AIRCOND)
+table(recs1$THERMAIN)
+table(cleanRECS$THERMAINAC)
+table(cleanRECS$CENACHP)
+table(cleanRECS$PROTHERMAC)
+table(cleanRECS$AIRCOND)
 ```
 
 
@@ -114,56 +143,36 @@ boxplot(TEMPHOME ~ HOUSEHOLDER_RACE, data = cleanRECS, col = as.factor(cleanRECS
 
 
 
-
+##ANCOVA AREA - ELAINE !!!!!!!
 ```{r}
 ## ANCOVA - Analysis of Covariance - ELAINE
   
 #This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and race. 
 
-data <- read.csv("C:/Users/elain/Desktop/Data Exploration/ENV757/recs2015_public_v4.csv")
-
-data <- data[c("KWH", "MONEYPY", "HOUSEHOLDER_RACE")]
-dim(data)
-
-#Exploratory Data Analysis
-
-attach(data)
-boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
-hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
+table(cleanRECS$AIRCOND)
+ancmod <- cleanRECS[c("KWH", "MONEYPY", "CENACHP", "HOUSEHOLDER_RACE")]
 
 
-#Data Cleaning 
-
-library(car)
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
-data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
-
-
+ancmod$MONEYPY <- as.factor(ancmod$MONEYPY)
+ancmod$CENACHP <- as.factor(ancmod$CENACHP)
+ancmod <- na.omit(ancmod)
+dim(ancmod)
+str(ancmod)
 ```
 
 ## Exploratory Data Analysis 
 ```{r}
 
-attach(data)
-boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
-hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
+attach(ancmod)
+boxplot(KWH ~ MONEYPY, data = ancmod, col = "green", xlab = "Annual Gross Income")
+boxplot(KWH ~ CENACHP, data = ancmod, col = "yellow", xlab = "Thermostat")
 
 
+dim(ancmod)
 
 ```
 
-##Data Cleaning
-```{r}
-#Data Cleaning 
 
-library(car)
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
-data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
-```
 
 
 ## Assumption Verification
@@ -172,15 +181,82 @@ The following assumptions must be met in order to proceed with an ANCOVA analysi
 
 ```{r}
 #Variances
+
+
 stdev1 <- tapply(KWH, MONEYPY, sd)
 round(max(stdev1)/min(stdev1),1)
 
-stdev2 <- tapply(KWH, HOUSEHOLDER_RACE, sd)
+stdev2 <- tapply(KWH, CENACHP, sd)
 max(stdev2)/min(stdev2)
 
-m1 <- lm(KWH ~ MONEYPY, data = data)
+#check assumptions for KWH and MONEYPY
+m1 <- lm(KWH ~ MONEYPY, data = ancmod)
+#plot(ancmod$KWH ~ ancmod$MONEYPY, data = ancmod, pch = 19, main = "Kilowatt Hours by Gross Annual Income", col = "red")# this isn't working for some reason atm
+summary(m1)
+
+#checking normality 
+myResPlots2(m1)
+
+
+trans1 <- boxCox(m1)
+trans1$x[which.max(trans1$y)]
+
+
+#log transformation 
+ancmod$logKWH <- log(ancmod$KWH)
+ancmod <- ancmod[-4913, ] #why isn't this being removed???
+
+m2 <- lm(logKWH ~ MONEYPY, data = ancmod)
+summary(m2)
+myResPlots2(m2)
+
+ancmod[3365,]
+ancmod[4913,] 
+
+#check assumptions for KWH and CENACHP
+
+m3 <- lm(logKWH ~ CENACHP, data = ancmod)
+summary(m3)
+myResPlots2(m3)
+
+
 
 ```
 
+
+*The residual plots show an unequal spread of points about 0 which indicates multiple outliers or influential points. The normal quantile plot is not straight indicating evidence of heteroskedasticity. The boxcox lambda value is 0.22 which suggests a transformation to the power of a 1/4 or we could round to 0 which would suggest a transformation of log. After transformation, we manage to fix some of the heteroskedasticity. When looking at specific outliers, one of the rows, 4913 has no data attached to it so it will be removed. * 
+
+```{r}
+fitanco <- lm(logKWH ~ MONEYPY + CENACHP + MONEYPY*CENACHP, data = ancmod)
+
+Anova(fitanco, type = 3)
+summary(fitanco)
+
+anccoef <- coef(fitanco)
+plot(logKWH ~ MONEYPY, data = ancmod, col = factor(CENACHP), pch = 16) #why is it boxplots???? 
+```
+
+
+
+```{r}
+##FROM CLASS 19
+#Creating the linear model
+lm1 <- lm(MEGAWATT_HOURS ~ HOUSEHOLD_INCOME*CLIMATE_REGION, data = x)
+coefs <- round(coef(lm1), 2)
+
+#Ploting the model
+plot(MEGAWATT_HOURS ~ HOUSEHOLD_INCOME,
+     data = x,
+     col = factor(CLIMATE_REGION), 
+     pch = 16,
+     cex = .5)
+legend("topleft", col = 1:5, legend = levels(factor(x$CLIMATE_REGION)), pch = 16)
+
+#Plotting the different best fit lines
+abline(a = coefs[1], b = coefs[2], col = "black", lwd = 3)
+for (i in 3:6){
+  abline(a = coefs[1] + coefs[i], b = coefs[2] + coefs[i+4], col = (i-1), lwd = 3)
+}
+```
 
 
