@@ -25,9 +25,9 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 ```{r}
 #Setting working directory 
-setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")
+#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
 #setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-#setwd("/Users/elain/Documents/GitHub/ENV757")
+setwd("/Users/elain/Documents/GitHub/ENV757")
 
 #Loading CSV 
 recs <- read.csv("recs2015_public_v4.csv")
@@ -172,7 +172,7 @@ legend("topleft",
 ```{r}
 ## ANCOVA - Analysis of Covariance - ELAINE
   
-#This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and race. 
+#This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and heat pump 
 
 table(cleanRECS$AIRCOND)
 ancmod <- cleanRECS[c("KWH", "MONEYPY", "CENACHP", "HOUSEHOLDER_RACE")]
@@ -190,7 +190,7 @@ str(ancmod)
 
 attach(ancmod)
 boxplot(KWH ~ MONEYPY, data = ancmod, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ CENACHP, data = ancmod, col = "yellow", xlab = "Thermostat")
+boxplot(KWH ~ CENACHP, data = ancmod, col = "yellow", xlab = "Heat Pump")
 
 
 dim(ancmod)
@@ -225,11 +225,11 @@ trans1 <- boxCox(m1)
 trans1$x[which.max(trans1$y)]
 
 
-#log transformation 
-ancmod$logKWH <- log(ancmod$KWH)
+#sq rt transformation 
+ancmod$transKWH <- (ancmod$KWH^(1/2))
 ancmod <- ancmod[-4913, ] #why isn't this being removed???
 
-m2 <- lm(logKWH ~ MONEYPY, data = ancmod)
+m2 <- lm(transKWH ~ MONEYPY, data = ancmod)
 summary(m2)
 myResPlots2(m2)
 
@@ -238,7 +238,7 @@ ancmod[4913,]
 
 #check assumptions for KWH and CENACHP
 
-m3 <- lm(logKWH ~ CENACHP, data = ancmod)
+m3 <- lm(transKWH ~ CENACHP, data = ancmod)
 summary(m3)
 myResPlots2(m3)
 
@@ -250,13 +250,15 @@ myResPlots2(m3)
 *The residual plots show an unequal spread of points about 0 which indicates multiple outliers or influential points. The normal quantile plot is not straight indicating evidence of heteroskedasticity. The boxcox lambda value is 0.22 which suggests a transformation to the power of a 1/4 or we could round to 0 which would suggest a transformation of log. After transformation, we manage to fix some of the heteroskedasticity. When looking at specific outliers, one of the rows, 4913 has no data attached to it so it will be removed. * 
 
 ```{r}
-fitanco <- lm(logKWH ~ MONEYPY + CENACHP + MONEYPY*CENACHP, data = ancmod)
+fitanco <- lm(transKWH ~ MONEYPY + CENACHP, data = ancmod)
 
-Anova(fitanco, type = 3)
+#removed(MONEYPY*CENACHP)#
+
+Anova(fitanco, type = 3) #error because there's an interaction that doesn't have an interaction 
 summary(fitanco)
 
 anccoef <- coef(fitanco)
-plot(logKWH ~ MONEYPY, data = ancmod, col = factor(CENACHP), pch = 16) #why is it boxplots???? 
+plot(transKWH ~ MONEYPY, data = ancmod, col = factor(CENACHP), pch = 16, cex = .5) #why is it boxplots-- because MONEYPY is categorical, you should treat moneypy as continuous 
 ```
 
 
