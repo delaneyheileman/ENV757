@@ -15,156 +15,186 @@ library(rvest)
 library(olsrr)
 library(corrplot)
 library(leaps)
+library(tidyverse)
+library(ggplot2)
+source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
+
 ```
 
 ## Loading Data 
 
 ```{r}
 #Setting working directory 
-#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")
-setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
+#setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+setwd("/Users/elain/Documents/GitHub/ENV757")
 
 #Loading CSV 
 recs <- read.csv("recs2015_public_v4.csv")
+#Gettign dimensions of our dataset 
 dim(recs)
+#Printing first 6 lines 
 head(recs)
 
-#selecting columns we care about 
+#Selecting columns we care about 
+recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION","UATYP10", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
 
-#WE NEED TO DECIDE WHAT WE WANT TO DO ABOUT IMPUTATION 
-recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
+#Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
+cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
 
-#getting rid of "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
-cleanRECS <- recs1[recs1$THERMAIN != "-2" & recs1$PROTHERM != "-2" & recs1$THERMAINAC != "-2" & recs1$PROTHERMAC != "-2",]
+cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
+                             '1' = 'Northeast',
+                             '2' = 'Midwest',
+                             '3' = 'South',
+                             '4' = 'West'))
 
-cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC, 
-                              "'1' = 'Northeast';
-                               '2' = 'Midwest';
-                               '3' = 'South'; 
-                               '4' = 'West'"))
-
-cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION, 
-                              "'1' = 'New England';
-                               '2' = 'Mid Atlantic';
-                               '3' = 'East North Central'; 
-                               '4' = 'West North Central';
-                               '5' = 'South Atlantic';
-                               '6' = 'East South Central';
-                               '7' = 'West South Central';
-                               '8' = 'Mountain North';
-                               '9' = 'Mountain South';
-                               '10'= 'Pacific'"))
+#Changing C (suburban areas) into Urban
+cleanRECS$UATYP10 <- recode(cleanRECS$UATYP10, 'C' = 'U')
 
 
 
+cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
+                              '1' = 'New England',
+                              '2' = 'Mid Atlantic',
+                              '3' = 'East North Central',
+                              '4' = 'West North Central',
+                              '5' = 'South Atlantic',
+                              '6' = 'East South Central',
+                              '7' = 'West South Central',
+                              '8' = 'Mountain North',
+                              '9' = 'Mountain South',
+                              '10'= 'Pacific'))
+
+#Why are we doing this? Not obvious
+cleanRECS$HOUSEHOLDER_RACE <- as.factor(recode(cleanRECS$HOUSEHOLDER_RACE,
+                                   '7' = '5'))
+
+cleanRECS$HOUSEHOLDER_RACE <- recode(cleanRECS$HOUSEHOLDER_RACE,
+                                   '1' = 'White',
+                                   '2' = 'Black/Afr.American',
+                                   '3' = 'Native American',
+                                   '4' = 'Asian',
+                                   '5' = 'Other')
+
+cleanRECS$MONEYPY <- recode(cleanRECS$MONEYPY,
+                           '1' = '1 - 20k',
+                           '2' = '2 - 40k',
+                           '3' = '3 - 60k',
+                           '4' = '4 - 80k',
+                           '5' = '5 - 100k',
+                           '6' = '6 - 120k',
+                           '7' = '7 - 140k',
+                           '8' = '8 - 140k+')
+
+
+cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
+                            '1' = 'YES',
+                            '0' = 'NO')
+#recoding energy assitance variable to yes or no value
+cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
+                            '1' = 'YES',
+                            '0' = 'NO')
+#Why are we doing this? Not obvious
+table(recs1$AIRCOND)
+table(recs1$THERMAIN)
+table(cleanRECS$THERMAINAC)
+table(cleanRECS$CENACHP)
+table(cleanRECS$PROTHERMAC)
+table(cleanRECS$AIRCOND)
 ```
 
+## DATA AND DATA CLEANING WRITE UP 
 
-#Columns we care about: 
+blah blah blah 
 
-MONEYPY (Annual income)
+this is what we used ______ and the units were _____ 
 
-ENERGYASST (participated in home energy assitnce program)
-
-REGIONC (region)
-
-DIVISION (census region)
-
-KOWNRENT
-
-THERMAIN (any thermostats)
-
-PROTHERM (programable therm)
-
-TEMPHOME (Temp in winter when someone is home)
-
-AIRCOND(air conditioner used y/n)
-
-CENACHP (heat pump y/n)
-
-THERMAINAC (Thermostat for air conditioner)
-
-PROTHERMAC (programable therm for air coniditoner)
-
-TEMPHOMEAC (summer temp when people are home)
-
-TES TES TEST
-MY TES TEST TEST 
-You can also embed plots, for example:
+clean was hard for x y and z reason 
 
 ```{r}
+#boxplot of kilo watt hours based on area 
+boxplot(KWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$KWH), xlab = "Rural or Urban")
 
-boxplot(TEMPHOME ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+#adding column for log KWH values
+cleanRECS$logKWH <- log(cleanRECS$KWH)
 
-boxplot(DOLLAREL ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+#boxploot of log valeus 
+boxplot(logKWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural or Urban")
 
-boxplot()
+#WHY IS THIS DOING THIS!!!!!!!
 
-boxplot(TEMPHOME ~ SCALEB, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+#t.test of KWH and region type 
+(test1 <- t.test(logKWH ~ UATYP10, data = cleanRECS, conf.level = .95))
 
-plot(jitter(TEMPHOME, factor = .5) ~ MONEYPY, data = cleanRECS, col = "dark green", pch = 19)
+##This is where bootstrapping starts! 
 
-boxplot(TEMPHOMEAC ~ MONEYPY, data = cleanRECS, col = as.factor(cleanRECS$MONEYPY))
+set.seed(230)
 
-boxplot(TEMPHOME ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+N <- 10000
+sR <- rep(NA, N)
+sU <- rep(NA, N)
+diffvals <- rep(NA, N)
 
-boxplot(TEMPHOMEAC ~ REGIONC, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+for (i in 1:N) {
+  sR <- sample(cleanRECS$logKWH[cleanRECS$UATYP10 == "R"],
+               sum(cleanRECS$UATYP10 == "R"), replace = TRUE)
 
-boxplot(TEMPHOME ~ DIVISION, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+  sU <- sample(cleanRECS$logKWH[cleanRECS$UATYP10 == "U"],
+               sum(cleanRECS$UATYP10 == "U"), replace = TRUE)
+diffvals[i] <- mean(log(sR)) - mean(log(sU))
 
-boxplot(TEMPHOME ~ HOUSEHOLDER_RACE, data = cleanRECS, col = as.factor(cleanRECS$REGIONC))
+}
+
+ci <- quantile(diffvals, c(0.025, 0.975))
+round(ci, 2)
+
+hist(diffvals, 
+     col = "blue", 
+     main = "Bootstrapped Sample Means Diff in KiloWattHours", 
+     xlab = "", 
+     breaks = 50, 
+     xlim = c(0.03, 1))
+
+#Add lines to histogram for CI's
+abline(v = ci, lwd=3, col="red")
+abline(v = test1$conf.int, lwd = 3, col = "green", lty = 2)
+legend("topleft", 
+       c("Original CI","Boot CI"), 
+       lwd = 3, 
+       col = c("green","red"), 
+       lty = c(2,1))
+
 ```
 
 
 
-
+##ANCOVA AREA - ELAINE !!!!!!!
 ```{r}
 ## ANCOVA - Analysis of Covariance - ELAINE
   
-#This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and race. 
+#This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus annual gross income and heat pump 
+
+table(cleanRECS$AIRCOND)
+ancmod <- cleanRECS[c("KWH", "MONEYPY", "CENACHP", "HOUSEHOLDER_RACE")]
 
 
-data <- recs[c("KWH", "MONEYPY", "HOUSEHOLDER_RACE")]
-dim(data)
-
-#Exploratory Data Analysis
-
-attach(data)
-boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
-hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
-
-
-#Data Cleaning 
-
-library(car)
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
-data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
-
-
+ancmod$MONEYPY <- as.factor(ancmod$MONEYPY)
+ancmod$CENACHP <- as.factor(ancmod$CENACHP)
+ancmod <- na.omit(ancmod)
+dim(ancmod)
+str(ancmod)
 ```
 
 ## Exploratory Data Analysis 
 ```{r}
 
-attach(data)
-boxplot(KWH ~ MONEYPY, data = data, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ HOUSEHOLDER_RACE, data = data, col = "blue", xlab = "Race")
-hist(MONEYPY, main = "Histogram of Annual Gross Household Income 2015", xlab = "Income lowest (1) - highest (8)", col = "salmon")
+attach(ancmod)
+boxplot(KWH ~ MONEYPY, data = ancmod, col = "green", xlab = "Annual Gross Income")
+boxplot(KWH ~ CENACHP, data = ancmod, col = "yellow", xlab = "Heat Pump")
 
 
+dim(ancmod)
 
-```
-
-##Data Cleaning
-```{r}
-#Data Cleaning 
-
-library(car)
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "7 = '5'")
-data$HOUSEHOLDER_RACE <- recode(data$HOUSEHOLDER_RACE, "1 = 'White'; 2 = 'Black/Afr.American'; 3 = 'Native American'; 4 = 'Asian'; 5 = 'Other'")
-data$MONEYPY <- recode(data$MONEYPY, "1 = '1 - 20k'; 2 = '2 - 40k'; 3 = '3 - 60k'; 4 = '4 - 80k'; 5 = '5 - 100k'; 6 = '6 - 120k'; 7 = '7 - 140k'; 8 = '8 - 140k+'")
 ```
 
 
@@ -174,17 +204,64 @@ The following assumptions must be met in order to proceed with an ANCOVA analysi
 
 ```{r}
 #Variances
+
+
 stdev1 <- tapply(KWH, MONEYPY, sd)
 round(max(stdev1)/min(stdev1),1)
 
-stdev2 <- tapply(KWH, HOUSEHOLDER_RACE, sd)
+stdev2 <- tapply(KWH, CENACHP, sd)
 max(stdev2)/min(stdev2)
 
+#check assumptions for KWH and MONEYPY
+m1 <- lm(KWH ~ MONEYPY, data = ancmod)
+#plot(ancmod$KWH ~ ancmod$MONEYPY, data = ancmod, pch = 19, main = "Kilowatt Hours by Gross Annual Income", col = "red")# this isn't working for some reason atm
+summary(m1)
 
-#
-m1 <- lm(KWH ~ MONEYPY, data = data)
+#checking normality 
+myResPlots2(m1)
+
+
+trans1 <- boxCox(m1)
+trans1$x[which.max(trans1$y)]
+
+
+#sq rt transformation 
+ancmod$transKWH <- (ancmod$KWH^(1/2))
+ancmod <- ancmod[-4913, ] #why isn't this being removed???
+
+m2 <- lm(transKWH ~ MONEYPY, data = ancmod)
+summary(m2)
+myResPlots2(m2)
+
+ancmod[3365,]
+ancmod[4913,] 
+
+#check assumptions for KWH and CENACHP
+
+m3 <- lm(transKWH ~ CENACHP, data = ancmod)
+summary(m3)
+myResPlots2(m3)
+
+
 
 ```
+
+
+*The residual plots show an unequal spread of points about 0 which indicates multiple outliers or influential points. The normal quantile plot is not straight indicating evidence of heteroskedasticity. The boxcox lambda value is 0.22 which suggests a transformation to the power of a 1/4 or we could round to 0 which would suggest a transformation of log. After transformation, we manage to fix some of the heteroskedasticity. When looking at specific outliers, one of the rows, 4913 has no data attached to it so it will be removed. * 
+
+```{r}
+fitanco <- lm(transKWH ~ MONEYPY + CENACHP, data = ancmod)
+
+#removed(MONEYPY*CENACHP)#
+
+Anova(fitanco, type = 3) #error because there's an interaction that doesn't have an interaction 
+summary(fitanco)
+
+anccoef <- coef(fitanco)
+plot(transKWH ~ MONEYPY, data = ancmod, col = factor(CENACHP), pch = 16, cex = .5) #why is it boxplots-- because MONEYPY is categorical, you should treat moneypy as continuous 
+```
+
+
 
 ```{r}
 ##FROM CLASS 19
