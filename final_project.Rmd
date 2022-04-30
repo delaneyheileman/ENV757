@@ -26,8 +26,8 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 ```{r}
 #Setting working directory 
 #setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-#setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-setwd("/Users/elain/Documents/GitHub/ENV757")
+setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+#setwd("/Users/elain/Documents/GitHub/ENV757")
 
 #Loading CSV 
 recs <- read.csv("recs2015_public_v4.csv")
@@ -261,27 +261,58 @@ anccoef <- coef(fitanco)
 plot(transKWH ~ MONEYPY, data = ancmod, col = factor(CENACHP), pch = 16, cex = .5) #why is it boxplots-- because MONEYPY is categorical, you should treat moneypy as continuous 
 ```
 
+```{r}
+cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
+                             '1 - 20k' = '20000',
+                             '2 - 40k' = '40000',
+                             '3 - 60k' = '60000',
+                             '4 - 80k' = '80000',
+                             '5 - 100k' = '100000',
+                             '6 - 120k' = '120000',
+                             '7 - 140k' = '140000',
+                             '8 - 140k+' = 'NA'))
+cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
+```
 
 
 ```{r}
 ##FROM CLASS 19
 #Creating the linear model
-lm1 <- lm(MEGAWATT_HOURS ~ HOUSEHOLD_INCOME*CLIMATE_REGION, data = x)
+
+mod1 <- regsubsets(logKWH ~ logIncBracket + DIVISION + UATYP10 + KOWNRENT + DIVISION*UATYP10,
+                   data = cleanRECS, nvmax = 7)
+mod1sum <- summary(mod1)
+mod1sum$which
+mod1sum$which[1, ]
+```
+
+*This model finds that the household's location in either an urban vs. rural area is the only significant predictor of household energy use.*
+
+*To show this visually, the following figure plots median income vs. household energy use on a log-log scale. The trend lines illustrate the OLS best fit lines for urban and for rural households differ significantly only in their y-intercept, but not in their slopes. In other words, being in an urban vs. rural area has a significant effect on household energy use, and there is not an interaction effect with median household income.*
+
+```{r}
+lm1 <- lm(cleanRECS$logKWH ~ cleanRECS$logIncBracket*cleanRECS$UATYP10)
+summary(lm1)
 coefs <- round(coef(lm1), 2)
 
-#Ploting the model
-plot(MEGAWATT_HOURS ~ HOUSEHOLD_INCOME,
-     data = x,
-     col = factor(CLIMATE_REGION), 
+#Plotting the model to show the lack of impact of household income, but impact of housing type.
+plot(cleanRECS$logKWH ~ cleanRECS$logIncBracket,
+     col = factor(cleanRECS$UATYP10), 
      pch = 16,
-     cex = .5)
-legend("topleft", col = 1:5, legend = levels(factor(x$CLIMATE_REGION)), pch = 16)
-
-#Plotting the different best fit lines
-abline(a = coefs[1], b = coefs[2], col = "black", lwd = 3)
-for (i in 3:6){
-  abline(a = coefs[1] + coefs[i], b = coefs[2] + coefs[i+4], col = (i-1), lwd = 3)
-}
+     cex = .5,
+     main = "Energy Consumption vs. Household Income (Log-Log)",
+     xlab = "Log of Household Income Bracket ($)",
+     ylab = "Log of Energy Consumption (kWh)")
+legend("topleft", col = 1:5, legend = c("Rural", "Urban"), pch = 16)
+abline(a = coefs[1], b = coefs[2], col = 1, lwd = 3)
+abline(a = coefs[1] + coefs[3], b = coefs[2] + coefs[4], col = 2, lwd = 3)
+text(x = 10.25, y = 9.75, col = 1,
+     paste0("Slope = ", coefs[2]))
+text(x = 10.25, y = 8.5, col = 2,
+     paste0("Slope = ", coefs[2] + coefs[4]))
+text(x = 10.25, y = 8.15, col = 2, paste0("but, p = ", round(summary(lm1)$coefficients[4, 4], 2)))
+text(x = 10.95, y = 6, col = 1, paste0("Rural energy use tends to be ", round(exp(coefs[3]), 2) ," kWh/year"))
+text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value = ", round(summary(lm1)$coefficients[2, 4], 5)))
 ```
 
 
