@@ -201,18 +201,30 @@ myResPlots2(m2)
 ancmod[3365,]
 ancmod[4913,] 
 
+ols_plot_cooksd_bar(m2)
+
+
 #check normality assumptions for KWH and CENACHP
 
 m3 <- lm(transKWH ~ CENACHP, data = ancmod)
 summary(m3)
 myResPlots2(m3)
 
-
+ols_plot_cooksd_bar(m3)
 
 ```
 
 
-*The residual plots show an unequal spread of points about 0 which indicates multiple outliers or influential points. The normal quantile plot is not straight indicating evidence of heteroskedasticity. The boxcox lambda value is 0.22 which suggests a transformation to the power of a 1/4 or we could round to 0 which would suggest a transformation of log. After transformation, we manage to fix some of the heteroskedasticity.* 
+*The residual plots show an unequal spread of points about 0 which indicates multiple outliers or influential points. The normal quantile plot is not straight indicating evidence of heteroskedasticity. The boxcox lambda value is 0.22 which suggests a transformation to the power of a 1/4 or we could round to 0 which would suggest a transformation of log. Model assumptions have been reasonably met after transformation. We manage to fix some of the heteroskedasticity and the residual plots are approximately normally distributed with equal spready around the 0. The normal quantile plot is approximately linear which shows that transformation has eliminated some heteroskedasticity. There are a few extreme outliers though. # check what to say about the outliers !!!!!!*
+
+
+##Permutation Test
+*Our permutation test null hypothesis: there is no significant effect of having a heat pump on kilowatt hours used controlling for annual gross income.*
+*The alternative hypothesis: there is a significant effect of having a heat pump on kilowatt hours used controlling for annual gross income.* 
+$$
+H_0 : \mu_1 = \mu_2 = ... = \mu_k \\ 
+H_a : \mu_i \ne \mu_k 
+$$
 
 ```{r}
 fitanco <- lm(transKWH ~ MONEYPY + CENACHP + MONEYPY*CENACHP, data = ancmod)
@@ -220,6 +232,7 @@ fitanco <- lm(transKWH ~ MONEYPY + CENACHP + MONEYPY*CENACHP, data = ancmod)
 
 Anova(fitanco, type = 3) 
 summary(fitanco)
+vif(fitanco)
 
 anccoef <- coef(fitanco)
 plot(transKWH ~ MONEYPY, data = ancmod, col = factor(CENACHP), pch = 16, cex = .5)
@@ -227,6 +240,12 @@ legend("topright", col = 1:2, legend = levels(factor(ancmod$CENACHP)), pch = 16)
 abline(a = anccoef[1], b = anccoef[2], col = 1, lwd = 3)
 abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 3)
 ```
+
+
+
+
+
+
 ##GLM AREA 
 ```{r}
 cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
