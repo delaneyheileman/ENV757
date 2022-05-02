@@ -4,6 +4,9 @@ author: "Delaney Heileman"
 date: "4/26/2022"
 output: html_document
 ---
+## Introduction - Background and Motivation 
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -20,8 +23,26 @@ library(ggplot2)
 source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 ```
+## Data - Variables Used
 
-## Loading Data 
+
+**ANCOVA Model** 
+*The ANCOVA model used three variables. The dependent variable was a continuous fourth root transformed kilowatt hour variable (transKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >120,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump*
+
+*   KWH (continuous): on a scale of kilowatt-hours used in the US in the year 2015
+*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
+*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
+  1 -	Less than $20,000
+	2	- $20,000 - $39,999
+	3	- $40,000 - $59,999
+	4 -	$60,000 to $79,999
+	5	- $80,000 to $99,999
+	6	- $100,000 to $119,999
+	7	- $120,000 to $139,999
+	8	- $140,000 or more
+
+
+## Loading Data and Data Cleaning
 
 ```{r}
 #Setting working directory 
@@ -40,7 +61,7 @@ head(recs)
 recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION","UATYP10", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
 
 #Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
-# <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
+cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
 
 cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
                              '1' = 'Northeast',
@@ -139,11 +160,12 @@ legend("topleft",
 
 
 
-##ANCOVA AREA - ELAINE !!!!!!!
+#ANCOVA -  Analysis of Covariance - ELAINE !!!!!!!
+
+*The ANCOVA model aims to fit a model predicting the continuous variable kilowatt hours 'KWH' based on and the categorical variable of whether households have a heat pump or not 'CENACHP' whether there is a significant interaction between the continuous variable of annual gross income 'MONEYPY and having a heat pump.* 
+
 ```{r}
-## ANCOVA - Analysis of Covariance - ELAINE
-  
-#This r-markdown is for the purposes of analyzing the continuous variables of kilowatt-hours versus the continuous variable annual gross income and heat pump 
+# Subset the dataset used for the ANCOVA model, clean the data, and check the characteristics of the dataset.
 
 ancmod <- cleanRECS[c("KWH", "MONEYPY", "CENACHP")]
 
@@ -155,72 +177,90 @@ str(ancmod)
 
 ## Exploratory Data Analysis 
 ```{r}
+#Create initial exploratory boxplots and scatterplots to determine whether the spread and the means of the data indicate similar variance or evidence of related variables. Only a scatterplot is made for KWH vs. MONEYPY because they are the only continuous variables.  
 
 attach(ancmod)
-boxplot(KWH ~ MONEYPY, data = ancmod, col = "green", xlab = "Annual Gross Income")
-boxplot(KWH ~ CENACHP, data = ancmod, col = "yellow", xlab = "Heat Pump")
+boxplot(KWH ~ MONEYPY, data = ancmod, col = terrain.colors(8), xlab = "Annual Gross Income", ylab = "Kilowatt-Hours")
+boxplot(KWH ~ CENACHP, data = ancmod, col = c("red3", "green3"), xlab = "Heat Pump", ylab = "Kilowatt-Hours")
 
-dim(ancmod)
+plot(KWH ~ MONEYPY, data = ancmod, col = "plum4", pch = 21, xlab = "Annual Gross Income", main = "Scatterplot of Kilowatt-Hours versus Annual Gross Income", ylab = "Kilowatt-Hours")
+
+
 
 ```
-*The initial boxplots indicate that annual gross income may have a statistically 
+*The initial boxplots indicate that kilowatt hour means vary across annual gross income and kilowatt hour means may vary across having or not having a heat pump. The spreads of annual gross income and the presence of a heat pump aren't vastly different. However, boxplots are not a true indication of interactions occuring between variables so other tests need to be completed to verify interactions.* 
 
 ## Assumption Verification
 
-The following assumptions must be met in order to proceed with an ANCOVA analysis: the dependent variables should be normally distributed, data should have approximately the same variance
+*The following assumptions must be met in order to proceed with an ANCOVA analysis: the dependent variables should be normally distributed, data should have approximately the same variance.*
 
 ```{r}
-#Check Variance Assumption !! check to see if I should do run this assumption again 
+#Check Variance Assumption
 
 stdev1 <- tapply(KWH, MONEYPY, sd)
 round(max(stdev1)/min(stdev1),1)
 
 stdev2 <- tapply(KWH, CENACHP, sd)
-max(stdev2)/min(stdev2)
+round(max(stdev2)/min(stdev2),1)
 
+```
+*The variances of the KWH and MONEYPY is 1.5 and the variances of KWH and CENACHP are 1.2 so we statisfy the equal variances assumption to conduct an ANCOVA test.*
+
+
+```{r}
 #check normality assumptions for KWH and MONEYPY
-m1 <- lm(KWH ~ MONEYPY, data = ancmod)
-plot(ancmod$KWH ~ ancmod$MONEYPY, data = ancmod, pch = 19, main = "Kilowatt Hours by Gross Annual Income", col = "red")
-summary(m1)
 
-#checking normality 
+m1 <- lm(KWH ~ CENACHP, data = ancmod)
+summary(m1)
 myResPlots2(m1)
 
-trans1 <- boxCox(m1)
-trans1$x[which.max(trans1$y)]
 
-
-#log transformation !!! check with prof if I can do this 
-ancmod$transKWH <- (ancmod$KWH)^(1/4)
-ancmod <- ancmod[-4913, ]
-
-m2 <- lm(transKWH ~ MONEYPY, data = ancmod)
+m2 <- lm(KWH ~ MONEYPY, data = ancmod)
+plot(ancmod$KWH ~ ancmod$MONEYPY, data = ancmod, pch = 19, main = "Kilowatt Hours by Gross Annual Income", col = "red")
 summary(m2)
 myResPlots2(m2)
 
-ancmod[3365,]
-ancmod[4913,] 
 
-ols_plot_cooksd_bar(m2)
+#Normality assumptions have not been met by the residuals so a transformation needs to be made. A box cox test will indicate what transformation is approprite for the data. 
+trans1 <- boxCox(m1)
+boxcoxtrans <- trans1$x[which.max(trans1$y)]
+print(boxcoxtrans)
+
+```
+*Normality of the model for the first 'm1' model fitting  KWH and CENACHP show evidence of non normality from the normal quantile plot which is not linear and evidence of outliers and influential points from the residual plots which show a heavy skew of positive residuals. This model has a r-squared value of 0.064 meaning 6.4% of the variability of kilowatt hour usage is explained by the presence of a heat pump. The 'CENACHP' variable has a lower p-value of less than 2e-16 meaning it is a statistically significant predictor of kilowatt hours. The second model 'm2' fitting KWH and MONEYPY also show similar evidence of non-normality from a non linear and curved normal quantile plot and residuals heavily positive skewed showing evidence of outliers and influential points. This indicates that the response variable needs some transformation. The 'm2' model has a r-squared value of 0.05306 meaning 5.3% of the predictabilit yof kilowatt-hour usage can be explained by the variable annual gross income or 'MONEYPY'. Like CENACHP, MONEYPY has a low p-value of less than 2e-16 meaning it is a statistically significant predictor. A box cox transformation results in a lambda of 0.26 which is approximately 0.2 which indicates a fourth root transformation would suit the dependent variable. *
+
+```{r}
+#Fourth Root Transformation 
+ancmod$transKWH <- (ancmod$KWH)^(1/4)
 
 
-#check normality assumptions for KWH and CENACHP
+#check normality assumptions for KWH and CENACHP and KWH and MONEYPY
 
 m3 <- lm(transKWH ~ CENACHP, data = ancmod)
 summary(m3)
 myResPlots2(m3)
-
 ols_plot_cooksd_bar(m3)
+
+
+m4 <- lm(transKWH ~ MONEYPY, data = ancmod)
+summary(m4)
+myResPlots2(m4)
+
+ols_plot_cooksd_bar(m4)
+
+
 
 ```
 
 
-*The residual plots show an unequal spread of points about 0 which indicates multiple outliers or influential points. The normal quantile plot is not straight indicating evidence of heteroskedasticity. The boxcox lambda value is 0.22 which suggests a transformation to the power of a 1/4 or we could round to 0 which would suggest a transformation of log. Model assumptions have been reasonably met after transformation. We manage to fix some of the heteroskedasticity and the residual plots are approximately normally distributed with equal spready around the 0. The normal quantile plot is approximately linear which shows that transformation has eliminated some heteroskedasticity. There are a few extreme outliers though. # check what to say about the outliers !!!!!!*
+*After transformation, model assumptions have been reasonably met after transformation. We manage to fix some of the heteroskedasticity and the residual plots are approximately normally distributed with equal spread around the 0. The normal quantile plot is approximately linear which shows that transformation has eliminated some heteroskedasticity. There are a few extreme outliers though. The cooks bars indicate that each model has several points which are outliers and could affect the model results; however, the model has over 3000 points which will will still yield insight from the data. # check what to say about the outliers !!!!!! After the transformation the refitted model 'm3' of the transformed KWH and CENACHP has a lower r-squared value of 0.063 meaning the predictability of KWH is 6.3% explained by our model. CENACHP is still statistically significant as a predictor. The refitted model 'm4' of the transformed KWH and MONEYPY has an improved r-squared value of 0.0558 meaning our model can predict 5.5% of KWH with the variable MONEYPY. MONEYPY is still a statistically significant predictor. *
 
 
 ##Permutation Test
 *Our permutation test null hypothesis: there is no significant effect of having a heat pump on kilowatt hours used controlling for annual gross income.*
 *The alternative hypothesis: there is a significant effect of having a heat pump on kilowatt hours used controlling for annual gross income.* 
+
+*In other words, we are trying to predict transformed KWH based on annual gross income, but fitting separate slopes for whether there is a the a heat pump or not in the household.*
 $$
 H_0 : \mu_1 = \mu_2 = ... = \mu_k \\ 
 H_a : \mu_i \ne \mu_k 
@@ -240,7 +280,7 @@ legend("topright", col = 1:2, legend = levels(factor(ancmod$CENACHP)), pch = 16)
 abline(a = anccoef[1], b = anccoef[2], col = 1, lwd = 3)
 abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 3)
 ```
-
+*The final fitted ANCOVA model is the transformed kilowatt hour variable (transKWH) predicted by annual gross income (MONEYPY), the presence of a heat pump (CENACHP), and the interaction of MONEYPY x CENACHP. The r-squared of this model improved from our separated predictors and our model explains 11.7% of the predictability of transformed kilowatt hours. Each of the predictors have p-values less than our alpha 0.05 meaning they are statistically significant predictors. Additionally, the interaction term between MONEYPY and CENACHP is statistically significant with a p-value of 4.5e-4. The model indicates that with there is a higher kilowatt usage with a higher gross annual income at a rate of (9.48 + 0.13 = 9.61). The presence of a heat pump means an increase in kilowatt hours at a rate of (9.48 + 0.48 = 10.96). The presence of a heat pump and a higher annual gross income have a increase in kilowatt hour usage at the rate of 9.48 + 0.08 = 9.56.* 
 
 
 
