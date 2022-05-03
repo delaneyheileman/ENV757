@@ -93,6 +93,21 @@ cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
 cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
                             '1' = 'YES',
                             '0' = 'NO')
+
+#Converting the Income Brackets into a numeric variable. Because we do not know the exact variables, we are assuming that each household is at the upper limit of that income bracket, and removing the highest income bracket that has no upper limit to avoid making unbounded assumptions about their incomes.
+cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
+                             '1' = '20000',
+                             '2' = '40000',
+                             '3' = '60000',
+                             '4' = '80000',
+                             '5' = '100000',
+                             '6' = '120000',
+                             '7' = '140000',
+                             '8' = 'NA'))
+#adding column for log of kWh values and household income.
+cleanRECS$logKWH <- log(cleanRECS$KWH)
+cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
+
 ```
 
 ## DATA AND DATA CLEANING WRITE UP 
@@ -106,9 +121,6 @@ clean was hard for x y and z reason
 ```{r}
 #boxplot of kilo watt hours based on area 
 boxplot(KWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$KWH), xlab = "Rural or Urban")
-
-#adding column for log KWH values
-cleanRECS$logKWH <- log(cleanRECS$KWH)
 
 #boxploot of log valeus 
 boxplot(logKWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural or Urban")
@@ -288,16 +300,7 @@ abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 
 
 ##GLM AREA 
 ```{r}
-cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
-                             '1' = '20000',
-                             '2' = '40000',
-                             '3' = '60000',
-                             '4' = '80000',
-                             '5' = '100000',
-                             '6' = '120000',
-                             '7' = '140000',
-                             '8' = 'NA'))
-cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
+
 ```
 
 
@@ -337,8 +340,9 @@ text(x = 10.25, y = 9.75, col = 1,
 text(x = 10.25, y = 8.5, col = 2,
      paste0("Slope = ", coefs[2] + coefs[4]))
 text(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", round(summary(lm1)$coefficients[4, 4], 2)))
-text(x = 10.95, y = 6, col = 1, paste0("Rural energy use tends to be ", round(exp(coefs[3]), 2) ," kWh/year"))
-text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value ≈ ", round(summary(lm1)$coefficients[2, 4], 5)))
+text(x = 10.95, y = 6, col = 1, paste0("Rural energy use tends to be"))
+text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value ≈ ", round(summary(lm1)$coefficients[2, 4], 5), ","))
+text(x = 10.95, y = 5.30, col = 1, "for households of similar incomes.")
 ```
 
 
