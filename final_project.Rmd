@@ -47,8 +47,8 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 ```{r}
 #Setting working directory 
 #setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-#setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-setwd("/Users/elain/Documents/GitHub/ENV757")
+setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+#setwd("/Users/elain/Documents/GitHub/ENV757")
 
 #Loading CSV 
 recs <- read.csv("recs2015_public_v4.csv")
@@ -289,14 +289,14 @@ abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 
 ##GLM AREA 
 ```{r}
 cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
-                             '1 - 20k' = '20000',
-                             '2 - 40k' = '40000',
-                             '3 - 60k' = '60000',
-                             '4 - 80k' = '80000',
-                             '5 - 100k' = '100000',
-                             '6 - 120k' = '120000',
-                             '7 - 140k' = '140000',
-                             '8 - 140k+' = 'NA'))
+                             '1' = '20000',
+                             '2' = '40000',
+                             '3' = '60000',
+                             '4' = '80000',
+                             '5' = '100000',
+                             '6' = '120000',
+                             '7' = '140000',
+                             '8' = 'NA'))
 cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
 ```
 
@@ -336,9 +336,9 @@ text(x = 10.25, y = 9.75, col = 1,
      paste0("Slope = ", coefs[2]))
 text(x = 10.25, y = 8.5, col = 2,
      paste0("Slope = ", coefs[2] + coefs[4]))
-text(x = 10.25, y = 8.15, col = 2, paste0("but, p = ", round(summary(lm1)$coefficients[4, 4], 2)))
+text(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", round(summary(lm1)$coefficients[4, 4], 2)))
 text(x = 10.95, y = 6, col = 1, paste0("Rural energy use tends to be ", round(exp(coefs[3]), 2) ," kWh/year"))
-text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value = ", round(summary(lm1)$coefficients[2, 4], 5)))
+text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value ≈ ", round(summary(lm1)$coefficients[2, 4], 5)))
 ```
 
 
