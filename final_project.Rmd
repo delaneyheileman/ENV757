@@ -266,10 +266,13 @@ legend("topleft",
        lty = c(2,1))
 
 ```
-*Our bootstrapped confidence interval is nearly identical to the original confidence interval*
+*Our bootstrapped confidence interval is nearly identical to the original confidence interval, further supporting our rejecting of the null hypothesis*
+
+#Permutation Test 
+
+*To further examine the difference in KWH usage between rural and urban groups we performed a permutation test.*
 
 ```{r}
-#Permutation Test 
 
 (actualdiff <- by(cleanRECS$logKWH, cleanRECS$UATYP10, mean))
 (actualdiff <- actualdiff[1] - actualdiff[2])
