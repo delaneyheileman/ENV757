@@ -46,9 +46,9 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 ```{r}
 #Setting working directory 
-#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
+setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
 #setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-setwd("/Users/elain/Documents/GitHub/ENV757")
+#setwd("/Users/elain/Documents/GitHub/ENV757")
 
 #Loading CSV 
 recs <- read.csv("recs2015_public_v4.csv")
@@ -104,13 +104,22 @@ this is what we used ______ and the units were _____
 clean was hard for x y and z reason 
 
 ```{r}
+#need to check if normal
+
 #boxplot of kilo watt hours based on area 
 boxplot(KWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$KWH), xlab = "Rural or Urban")
+
+hist(cleanRECS$KWH)
 
 #adding column for log KWH values
 cleanRECS$logKWH <- log(cleanRECS$KWH)
 
-#boxploot of log valeus 
+hist(cleanRECS$logKWH)
+
+qqPlot(cleanRECS$KWH)
+qqPlot(cleanRECS$logKWH) #Is this normal enough? 
+
+#boxploot of log values 
 boxplot(logKWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural or Urban")
 
 #WHY IS THIS DOING THIS!!!!!!!
@@ -155,6 +164,34 @@ legend("topleft",
        lwd = 3, 
        col = c("green","red"), 
        lty = c(2,1))
+
+
+
+#Permutation Test 
+
+(actualdiff <- by(cleanRECS$logKWH, cleanRECS$UATYP10, mean))
+(actualdiff <- actualdiff[1] - actualdiff[2])
+
+fakeregion <- sample(cleanRECS$UATYP10) # default is replace = FALSE - this is a PERMUTATION (a reordering) of the age group assignments
+sample(1:10)
+fakeregion
+
+boxplot(cleanRECS$logKWH ~ fakeregion, main = "KWH, FAKE DATA", col = "green", xlab = "KWH")
+
+diff0 <- mean(cleanRECS$logKWH[fakeregion == "R"]) -  mean(cleanRECS$logKWH[fakeregion == "U"])
+
+set.seed(1)
+N <- 10000
+diffvals2 <- rep(NA, N)
+for (i in 1:N) {
+  fakeregion <- sample(cleanRECS$UATYP10)  # default is replace = FALSE
+  diffvals2[i] <- mean(cleanRECS$logKWH[fakeregion == "R"]) -  mean(cleanRECS$logKWH[fakeregion == "U"])
+}
+
+#Make histogram of permuted mean differences
+hist(diffvals2, col = "yellow", main = "Permuted Sample Means Diff in KWH", xlab = "KWH", breaks = 50,)
+abline(v = actualdiff, col = "blue", lwd = 3)
+text(actualdiff - 0.2, 100 , paste("Actual Diff in KWH =", round(actualdiff,2)),srt = 90)
 
 ```
 
