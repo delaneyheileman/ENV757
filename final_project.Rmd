@@ -2,10 +2,13 @@
 title: "Final Project"
 author: "Delaney Heileman"
 date: "4/26/2022"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 ## Introduction - Background and Motivation 
 
+For this project we used the 2015 Residential Energy Consumption Survey conducted by the Energy Information Agency. This survey asks a range of questions regarding how much, how often, and what type of energy if used. Our group wanted to examine how various variables impact household electricity usage, in Kilo Watt Hours. 
 
 
 ```{r setup, include=FALSE}
@@ -25,22 +28,52 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 ```
 ## Data - Variables Used
 
+This data set originally has 759 different variables and 5686 observations. For our project we decide on 21 variables of interest. Ultimately only using _____ for our final analysis. Below is a table of the variables we selected and what they represent. 
 
-**ANCOVA Model** 
-*The ANCOVA model used three variables. The dependent variable was a continuous fourth root transformed kilowatt hour variable (transKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >120,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump*
-
-*   KWH (continuous): on a scale of kilowatt-hours used in the US in the year 2015
-*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
-*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
-  1 -	Less than $20,000
-	2	- $20,000 - $39,999
-	3	- $40,000 - $59,999
-	4 -	$60,000 to $79,999
-	5	- $80,000 to $99,999
-	6	- $100,000 to $119,999
-	7	- $120,000 to $139,999
-	8	- $140,000 or more
-
+\begin{tabular}{l|r|r|r|r}
+MONEYPY & Household Income\\
+\hline
+ENERGYASST & If Household Received Energy Assitance\\
+\hline
+REGIONC & Region\\
+\hline
+DIVISION & Census Division\\
+\hline
+UATYP10 & Urban or Rural\\
+\hline
+KOWNRENT & Owner or Renter\\
+\hline
+THERMAIN & Is there a thermostat?\\
+\hline
+PROTHERM & Is there a programable thermostat?\\
+\hline
+TEMPHOME & Temperature of the home, during the winter when someone is home\\
+\hline
+AIRCOND & Is there an air conditioner?\\
+\hline
+CENACHP & Is the AC a heatpump?\\
+\hline
+THERMAINAC & Is there an AC thermostat?\\
+\hline
+PROTHERMAC & Is the AC thermostat programable?\\
+\hline
+TEMPHOMEAC & Temperature of the home, during the winter when someone is home\\
+\hline
+HOUSEHOLDER_RACE & Race of householder\\
+\hline
+SCALEB & Frequency of reducing or forgoing basic necessities due to home energy bill\\
+\hline
+KWH & Total Kilo Watt Hours used in 2015\\
+\hline
+DOLLAREL & Dollars spent on electricity\\
+\hline
+DOLLARNG & Dollars spent on natural gas\\
+\hline
+DOLLARLP & Dollars spent on liquid petroleum\\
+\hline
+DOLLARFO & Dollars spent on other fuels\\
+\hline
+\end{tabular}
 
 ## Loading Data and Data Cleaning
 
@@ -117,6 +150,11 @@ blah blah blah
 this is what we used ______ and the units were _____ 
 
 clean was hard for x y and z reason 
+
+##General Graphics
+
+
+
 
 ```{r}
 #need to check if normal
@@ -214,6 +252,23 @@ text(actualdiff - 0.2, 100 , paste("Actual Diff in KWH =", round(actualdiff,2)),
 
 
 #ANCOVA -  Analysis of Covariance 
+
+
+**ANCOVA Model** 
+*The ANCOVA model used three variables. The dependent variable was a continuous fourth root transformed kilowatt hour variable (transKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >120,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump*
+
+*   KWH (continuous): on a scale of kilowatt-hours used in the US in the year 2015
+*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
+*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
+  1 -	Less than $20,000
+	2	- $20,000 - $39,999
+	3	- $40,000 - $59,999
+	4 -	$60,000 to $79,999
+	5	- $80,000 to $99,999
+	6	- $100,000 to $119,999
+	7	- $120,000 to $139,999
+	8	- $140,000 or more
+
 *The ANCOVA model aims to fit a model predicting the continuous variable kilowatt hours 'KWH' based on and the categorical variable of whether households have a heat pump or not 'CENACHP' whether there is a significant interaction between the continuous variable of annual gross income 'MONEYPY and having a heat pump.* 
 
 ```{r}
