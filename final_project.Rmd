@@ -25,8 +25,27 @@ library(tidyverse)
 library(ggplot2)
 source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
-```
 ## Data - Variables Used
+#Setting working directory 
+setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
+#setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+#setwd("/Users/elain/Documents/GitHub/ENV757")
+
+```
+
+#Loading Data 
+
+```{r, include=FALSE}
+#Loading CSV 
+recs <- read.csv("recs2015_public_v4.csv")
+#Gettign dimensions of our dataset 
+dim(recs)
+#Printing first 6 lines 
+head(recs)
+
+#Selecting columns we care about 
+recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION","UATYP10", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
+```
 
 This data set originally has 759 different variables and 5686 observations. For our project we decide on 21 variables of interest. Ultimately only using _____ for our final analysis. Below is a table of the variables we selected and what they represent. 
 
@@ -75,24 +94,25 @@ DOLLARFO & Dollars spent on other fuels\\
 \hline
 \end{tabular}
 
-## Loading Data and Data Cleaning
+This would maybe make more sense in a different section? 
+**ANCOVA Model** 
+*The ANCOVA model used three variables. The dependent variable was a continuous fourth root transformed kilowatt hour variable (transKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >120,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump*
+
+*   KWH (continuous): on a scale of kilowatt-hours used in the US in the year 2015
+*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
+*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
+  1 -	Less than $20,000
+	2	- $20,000 - $39,999
+	3	- $40,000 - $59,999
+	4 -	$60,000 to $79,999
+	5	- $80,000 to $99,999
+	6	- $100,000 to $119,999
+	7	- $120,000 to $139,999
+	8	- $140,000 or more
+
+#Data Cleaning
 
 ```{r}
-#Setting working directory 
-setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-#setwd("/Users/liamgunn/Documents/School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-#setwd("/Users/elain/Documents/GitHub/ENV757")
-
-#Loading CSV 
-recs <- read.csv("recs2015_public_v4.csv")
-#Gettign dimensions of our dataset 
-dim(recs)
-#Printing first 6 lines 
-head(recs)
-
-#Selecting columns we care about 
-recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION","UATYP10", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
-
 #Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
 cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
 
@@ -102,9 +122,14 @@ cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
                              '3' = 'South',
                              '4' = 'West'))
 
-#Changing C (suburban areas) into Urban
-cleanRECS$UATYP10 <- recode(cleanRECS$UATYP10, 'C' = 'U')
 
+boxplot(KWH ~ UATYP10, data = cleanRECS, col = terrain.colors(8), xlab = "Rural, Urban, Suburban", ylab = "Kilowatt-Hours")
+mean <- round(tapply(cleanRECS$KWH,cleanRECS$UATYP10, mean),0)
+points(mean, col = 'red', pch = 19, cex = 1.2)
+text(x = c(1:8), y = mean, labels = round(mean, 2))
+
+table(cleanRECS$UATYP10)
+cleanRECS$UATYP10 <- recode(cleanRECS$UATYP10, 'C' = 'U')
 
 
 cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
@@ -122,7 +147,7 @@ cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
 cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
                             '1' = 'YES',
                             '0' = 'NO')
-#recoding energy assitance variable to yes or no value
+#recoding energy assistance variable to yes or no value
 cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
                             '1' = 'YES',
                             '0' = 'NO')
@@ -137,52 +162,70 @@ cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
                              '6' = '120000',
                              '7' = '140000',
                              '8' = 'NA'))
-#adding column for log of kWh values and household income.
-cleanRECS$logKWH <- log(cleanRECS$KWH)
+
+#This would likely make more sense in a different section after we show the need for it. 
 cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
 
 ```
 
-## DATA AND DATA CLEANING WRITE UP 
-
-blah blah blah 
-
-this is what we used ______ and the units were _____ 
-
-clean was hard for x y and z reason 
-
-##General Graphics
+Our data cleaning was relatively straight forward. Our main concern was removing thermostat values that were "-2" which are coded as "N/A" in the code book. We also combined the Suburban values with the Urban values. This was done because the Urban and Suburban values are very similar and we wanted to be able to compare rural energy  usage with non-rural. From there we re-coded a few variables for the sake of making some graphics more legible. 
 
 
+# General Graphics
+```{r}
+
+boxplot(KWH ~ REGIONC, data = cleanRECS, col = terrain.colors(8), xlab = "Census Region", ylab = "Kilowatt-Hours")
+mean <- round(tapply(cleanRECS$KWH,cleanRECS$REGIONC, mean),0)
+points(mean, col = 'red', pch = 19, cex = 1.2)
+text(x = c(1:8), y = mean, labels = round(mean, 2))
+
+boxplot(KWH ~ UATYP10, data = cleanRECS, col = terrain.colors(8), xlab = "Rural v. Urban", ylab = "Kilowatt-Hours")
+mean <- round(tapply(cleanRECS$KWH,cleanRECS$UATYP10, mean),0)
+points(mean, col = 'red', pch = 19, cex = 1.2)
+text(x = c(1:8), y = mean, labels = round(mean, 2))
+
+plot(cleanRECS$KWH, cleanRECS$DOLLAREL)
+
+```
+# T-Test 
+
+After playing around with the data it looked like a t-test based on Kilowatt-Hours based on Rural v. Urban would be interesting. Before continuing we check to see if the data was normally distributed. 
+
+```{r}
+hist(cleanRECS$KWH, col = "salmon", main = "Hist of Kilowatt-Hours", xlab = "KWH", breaks = 50,)
+qqPlot(cleanRECS$KWH)
+```
+
+The histogram shows that the data is highly right skewed and does not appear to be normally distributed. This is confirmed by our normal quantile plot. The KWH data is not normal, to remedy this we took the log of this data. 
+
+```{r}
+cleanRECS$logKWH <- log(cleanRECS$KWH)
+hist(cleanRECS$logKWH, col = "salmon", main = "Hist of Log Kilowatt-Hours", xlab = "Log KWH", breaks = 50,)
+qqPlot(cleanRECS$logKWH) 
+
+#boxplot of log values 
+boxplot(logKWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural or Urban")
+```
+
+*After the log transformation the data is still not completely normal, and it appears to now be slightly left skewed. However, the log transformed data is a huge improvement and very close to being normal. We will use this for our t-test.*
+
+*Null hypothesis: There is no difference in KWH usage between the rural and urban groups.*
+
+*Alternative hypothesis: There is a difference in KWH usage between the rural and urban groups.* 
 
 
 ```{r}
-#need to check if normal
-
-#boxplot of kilo watt hours based on area 
-boxplot(KWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$KWH), xlab = "Rural or Urban")
-
-
-hist(cleanRECS$KWH)
-
-#adding column for log KWH values
-cleanRECS$logKWH <- log(cleanRECS$KWH)
-
-hist(cleanRECS$logKWH)
-
-qqPlot(cleanRECS$KWH)
-qqPlot(cleanRECS$logKWH) #Is this normal enough? 
-
-#boxploot of log values 
-boxplot(logKWH ~ UATYP10 , data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural or Urban")
-
-#WHY IS THIS DOING THIS!!!!!!!
-
 #t.test of KWH and region type 
 (test1 <- t.test(logKWH ~ UATYP10, data = cleanRECS, conf.level = .95))
+```
+*The t-test shows us that there is a true difference in means between the rural and urban group with a p-value of 2.2e-16. This small p-value indicated high statistical significant. Thus, WE REJECT THE NULL HYPOTHESIS*
 
-##This is where bootstrapping starts! 
 
+#Bootstrapping
+
+*To further test the KWH usage based on Rural v. Urban settings we will perform boostrapping*
+
+```{r}
 set.seed(230)
 
 N <- 10000
@@ -196,19 +239,22 @@ for (i in 1:N) {
 
   sU <- sample(cleanRECS$logKWH[cleanRECS$UATYP10 == "U"],
                sum(cleanRECS$UATYP10 == "U"), replace = TRUE)
-diffvals[i] <- mean(log(sR)) - mean(log(sU))
+diffvals[i] <- mean((sR)) - mean((sU))
 
 }
 
 ci <- quantile(diffvals, c(0.025, 0.975))
+print("Bootstrapped Confidence Intervals")
 round(ci, 2)
+
+print("Original Confidence Intervals")
+round(test1$conf.int,2)
 
 hist(diffvals, 
      col = "blue", 
      main = "Bootstrapped Sample Means Diff in KiloWattHours", 
      xlab = "", 
-     breaks = 50, 
-     xlim = c(0.03, 1))
+     breaks = 50)
 
 #Add lines to histogram for CI's
 abline(v = ci, lwd=3, col="red")
@@ -219,8 +265,10 @@ legend("topleft",
        col = c("green","red"), 
        lty = c(2,1))
 
+```
+*Our bootstrapped confidence interval is nearly identical to the original confidence interval*
 
-
+```{r}
 #Permutation Test 
 
 (actualdiff <- by(cleanRECS$logKWH, cleanRECS$UATYP10, mean))
@@ -252,22 +300,6 @@ text(actualdiff - 0.2, 100 , paste("Actual Diff in KWH =", round(actualdiff,2)),
 
 
 #ANCOVA -  Analysis of Covariance 
-
-
-**ANCOVA Model** 
-*The ANCOVA model used three variables. The dependent variable was a continuous fourth root transformed kilowatt hour variable (transKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >120,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump*
-
-*   KWH (continuous): on a scale of kilowatt-hours used in the US in the year 2015
-*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
-*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
-  1 -	Less than $20,000
-	2	- $20,000 - $39,999
-	3	- $40,000 - $59,999
-	4 -	$60,000 to $79,999
-	5	- $80,000 to $99,999
-	6	- $100,000 to $119,999
-	7	- $120,000 to $139,999
-	8	- $140,000 or more
 
 *The ANCOVA model aims to fit a model predicting the continuous variable kilowatt hours 'KWH' based on and the categorical variable of whether households have a heat pump or not 'CENACHP' whether there is a significant interaction between the continuous variable of annual gross income 'MONEYPY and having a heat pump.* 
 
