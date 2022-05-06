@@ -28,8 +28,8 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 ## Data - Variables Used
 #Setting working directory 
 #setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-#setwd("/Users/elain/Documents/GitHub/ENV757")
+#setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+setwd("/Users/elain/Documents/GitHub/ENV757")
 
 ```
 
@@ -82,7 +82,7 @@ HOUSEHOLDER_RACE & Race of householder\\
 \hline
 SCALEB & Frequency of reducing or forgoing basic necessities due to home energy bill\\
 \hline
-KWH & Total Kilo Watt Hours used in 2015\\
+KWH & Total Kilowatt-Hours used in 2015\\
 \hline
 DOLLAREL & Dollars spent on electricity\\
 \hline
@@ -94,21 +94,8 @@ DOLLARFO & Dollars spent on other fuels\\
 \hline
 \end{tabular}
 
-##Let's move the code to the data-cleaning section, and the explanation to the ANCOVA section.
-**ANCOVA Model** 
-*The ANCOVA model used three variables. The dependent variable was a continuous fourth root transformed kilowatt hour variable (transKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >140,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump.*
 
-*   KWH (continuous): on a scale of kilowatt-hours used in the US in the year 2015
-*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
-*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
-  1 -	Less than $20,000
-	2	- $20,000 to $39,999
-	3	- $40,000 to $59,999
-	4 -	$60,000 to $79,999
-	5	- $80,000 to $99,999
-	6	- $100,000 to $119,999
-	7	- $120,000 to $139,999
-	8	- $140,000 or more
+
 
 #Data Cleaning
 
@@ -154,6 +141,11 @@ cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
 cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
                             '1' = 'YES',
                             '0' = 'NO')
+
+#At the advice of the professor, create a cutoff for KWH < 1500 in order to remove influential variables which are affecting normality. Anything less than 1500 KWH is labeled as NA and then removed. Then KWH is log transformed. 
+cleanRECS$KWH[cleanRECS$KWH < 1500] <- NA
+cleanRECS <- na.omit(cleanRECS)
+cleanRECS$logKWH <- log(cleanRECS$KWH)
 
 #Converting the Income Brackets into a numeric variable. Because we do not know the exact variables, we are assuming that each household is at the upper limit of that income bracket, and removing the highest income bracket that has no upper limit to avoid making unbounded assumptions about their incomes.
 cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
@@ -333,7 +325,22 @@ text(actualdiff - 0.2, 100 , paste("Actual Diff in Log of Kilowatt-Hours =", rou
 
 
 #ANCOVA -  Analysis of Covariance 
+*The ANCOVA model used three variables. The dependent variable was a continuous log transformed kilowatt hour variable (logKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >140,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump.*
 
+*   KWH (continuous): on a scale of annual kilowatt-hours used by households in the US in the year 2015
+*   logKWH (continuous): on a log transformed scale of kilowatt-hours used by households in the US in the year 2015
+*   CENACHP (categorical): the presence of a heat pump "Yes" or "No"
+*   MONEYPY (continuous): Gross annual income of a household in the year 2015. 8 levels. 	
+  1 -	Less than $20,000
+	2	- $20,000 to $39,999
+	3	- $40,000 to $59,999
+	4 -	$60,000 to $79,999
+	5	- $80,000 to $99,999
+	6	- $100,000 to $119,999
+	7	- $120,000 to $139,999
+	8	- $140,000 or more
+	
+	
 *The ANCOVA model aims to fit a model predicting the continuous variable kilowatt hours 'KWH' based on and the categorical variable of whether households have a heat pump or not 'CENACHP', and whether there is a significant interaction between the continuous variable of annual gross income 'MONEYPY and having a heat pump.* 
 
 ```{r}
@@ -357,7 +364,7 @@ boxplot(KWH ~ MONEYPY,
         col = terrain.colors(8),
         xlab = "Annual Gross Income",
         ylab = "Kilowatt-Hours")
-means1 <- round(tapply(KWH, MONEYPY, mean),0)
+means1 <- round(tapply(KWH, MONEYPY, mean),1)
 points(means1, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:8), y = means1, labels = round(means1, 2))
 
@@ -366,7 +373,7 @@ boxplot(KWH ~ CENACHP,
         col = c("red3", "green3"),
         xlab = "Heat Pump",
         ylab = "Kilowatt-Hours")
-means2 <- round(tapply(KWH,CENACHP, mean),0)
+means2 <- round(tapply(KWH,CENACHP, mean),1)
 points(means1, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:2), y = means2, labels = round(means2, 2))
 
@@ -390,7 +397,7 @@ stdev2 <- tapply(KWH, CENACHP, sd)
 round(max(stdev2)/min(stdev2),1)
 round(max(stdev2)/min(stdev2),1) <= 2
 ```
-*The variances of KWH and CENACHP are 1.2 so we satisfy the equal variances assumption to conduct an ANCOVA test. We don't run this test on MONEYPY because the test would only be testing values of 1-8 and wouldn't yield any meaningful insights.*
+*The variances of KWH and CENACHP are 1.2 so less than 2 thus we satisfy the equal variances assumption to conduct an ANCOVA test. We don't run this test on MONEYPY because the test would only be testing values of 1-8 and wouldn't yield any meaningful insights.*
 
 
 ```{r}
@@ -416,17 +423,17 @@ print(boxcoxtrans)
 
 ```{r}
 #Log Transformation 
-ancmod$transKWH <- log(ancmod$KWH)
+ancmod$logKWH <- log(ancmod$KWH)
 
 #check normality assumptions for KWH and CENACHP and KWH and MONEYPY
 
-m3 <- lm(transKWH ~ CENACHP, data = ancmod)
+m3 <- lm(logKWH ~ CENACHP, data = ancmod)
 summary(m3)
 myResPlots2(m3)
 ols_plot_cooksd_bar(m3)
 
 
-m4 <- lm(transKWH ~ MONEYPY, data = ancmod)
+m4 <- lm(logKWH ~ MONEYPY, data = ancmod)
 summary(m4)
 myResPlots2(m4)
 
@@ -435,7 +442,7 @@ ols_plot_cooksd_bar(m4)
 ```
 
 
-*After transformation, model assumptions have been reasonably met after transformation. We manage to fix some of the heteroskedasticity and the residual plots are approximately normally distributed with equal spread around the 0. The normal quantile plot is approximately linear, which shows that transformation has eliminated some heteroskedasticity. There are a few extreme outliers though. The cooks bars indicate that each model has several points which are outliers and could affect the model results; however, the model has over 3000 points which will  still yield insight from the data. After the transformation the refitted model 'm3' of the log transformed KWH and CENACHP has a lower r-squared value of 0.06019, meaning the predictability of KWH is 6.0% explained by our model. CENACHP is still statistically significant as a predictor. The refitted model 'm4' of the log transformed KWH and MONEYPY has an improved r-squared value of 0.05358 meaning our model can predict 5.4% of KWH with the variable MONEYPY. MONEYPY is still a statistically significant predictor. *
+*After transformation, model assumptions have been reasonably met after transformation. We manage to fix some of the heteroskedasticity and the residual plots are approximately normally distributed with equal spread around the 0. The normal quantile plot is approximately linear, which shows that transformation has eliminated some heteroskedasticity. There are a few extreme outliers though. The cooks bars indicate that each model has several points which are outliers but they are not influential points so they aren't influential the model results greatly. Additionally, the model has over 3000 points which will still yield insight from the data. After the transformation the refitted model 'm3' of the log transformed KWH and CENACHP has a lower r-squared value of 0.06019, meaning the predictability of KWH is 6.0% explained by our model. CENACHP is still statistically significant as a predictor. The refitted model 'm4' of the log transformed KWH and MONEYPY has an improved r-squared value of 0.05358 meaning our model can predict 5.4% of KWH with the variable MONEYPY. MONEYPY is still a statistically significant predictor. *
 
 
 ##Permutation Test
@@ -454,7 +461,7 @@ table(MONEYPY, CENACHP)
 *The table of MONEYPY and CENACHP verifies that there are variables present for every level of the variable.*
 
 ```{r}
-fitanco <- lm(transKWH ~ MONEYPY + CENACHP + MONEYPY*CENACHP, data = ancmod)
+fitanco <- lm(logKWH ~ MONEYPY + CENACHP + MONEYPY*CENACHP, data = ancmod)
 
 
 Anova(fitanco, type = 3) 
@@ -462,16 +469,20 @@ summary(fitanco)
 vif(fitanco)
 
 anccoef <- coef(fitanco)
-plot(transKWH ~ MONEYPY,
+plot(logKWH ~ MONEYPY,
      main = "Log of Annual Electricity Use vs. Income by Presence of Heatpump",
      ylab = "Log of Kilowatt-Hours",
      xlab = "Income Brackett",
      data = ancmod, col = factor(CENACHP), pch = 16, cex = .5)
-legend("topright", col = 1:2, legend = levels(factor(ancmod$CENACHP)), pch = 16)
+legend("topright", col = 2:1, legend = c("Yes - Heat Pump", "No - Heat Pump"), pch = 16)
 abline(a = anccoef[1], b = anccoef[2], col = 1, lwd = 3)
+text(x = 4.4, y = 7.5, col = 1,
+     paste0("y =", round((anccoef[1]), 2), "x + ", round((anccoef[2]), 2)))
 abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 3)
+text(x = 4.4, y = 10.8, col = 2,
+     paste0("y =", round((anccoef[1] + anccoef[3]), 2), "x + ", round((anccoef[2] + anccoef[4]), 2)))
 ```
-*The final fitted ANCOVA model is the log transformed kilowatt hour variable (transKWH) predicted by annual gross income (MONEYPY), the presence of a heat pump (CENACHP), and the interaction of MONEYPY x CENACHP. The r-squared of this model improved from our separated predictors and our model explains 11.2% of the predictability of transformed kilowatt hours. Each of the predictors have p-values less than our alpha 0.05 meaning they are statistically significant predictors. Additionally, the interaction term between MONEYPY and CENACHP is statistically significant with a p-value of  0.00246. The model indicates that with there is a higher kilowatt usage with a higher gross annual income at a rate of (8.97 +  0.05 = 9.02). The presence of a heat pump means an increase in kilowatt hours at a rate of (8.97 +  0.19 = 10.16). The presence of a heat pump and a higher annual gross income have a increase in kilowatt hour usage at the rate of (8.97 +  0.02 = 8.99) so the effect of the two together is fairly modest. This model rejects the null hypothesis that log transformed KWH is not significantly predicted by MONEYPY, CENACHP, and MONEYPY x CENACHP and we can conclude that all the variables are significant predictors of log KWH. * 
+*The final fitted ANCOVA model is the log transformed kilowatt hour variable (logKWH) predicted by annual gross income (MONEYPY), the presence of a heat pump (CENACHP), and the interaction of MONEYPY x CENACHP. The r-squared of this model improved from our separated predictors and our model explains 11.2% of the predictability of transformed kilowatt hours. Each of the predictors have p-values less than our alpha 0.05 meaning they are statistically significant predictors. Additionally, the interaction term between MONEYPY and CENACHP is statistically significant with a p-value of  0.00246. The model indicates that with there is a higher kilowatt usage with a higher gross annual income at a rate of (8.97). The presence of a heat pump means an increase in kilowatt hours at a rate of (8.97 +  0.20 = 9.17). The presence of a heat pump and a higher annual gross income have a increase in kilowatt hour usage at the rate of (8.97 +  0.02 = 8.99) so the effect of the two together is fairly modest. The model has two equations fitted. One for the presence of a heat pump and an increase in gross annual income which is y = 9.17x + 0.08. The base equation without a heat pump and increasing gross annual income is  y = 8.97x + 0.05. This model rejects the null hypothesis that log transformed KWH is not significantly predicted by MONEYPY, CENACHP, and MONEYPY x CENACHP and we can conclude that all the variables are significant predictors of log KWH.* 
 
 ##GLM AREA 
 ```{r}
