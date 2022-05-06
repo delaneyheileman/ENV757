@@ -6,7 +6,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-# Introduction - Background and Motivation 
+#Introduction - Background and Motivation 
 
 *For this project, we used the 2015 Residential Energy Consumption Survey conducted by the Energy Information Agency. This survey asks a range of questions regarding how much, how often, and what type of energy was used. Our group wanted to examine how various variables impact household electricity usage, in kilowatt-hours.*
 
@@ -26,9 +26,8 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 
 #Setting working directory 
-
-setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-#setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
+setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
 #setwd("/Users/elain/Documents/GitHub/ENV757")
 
 ```
@@ -102,19 +101,19 @@ DOLLARFO & Dollars spent on other fuels\\
 ```{r}
 #Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
 cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
-
 ```
 *We started by removing thermostat values that were "-2" which are coded as "N/A" in the code book. We decided to remove these values because we were only interested in the binary of if someone does or does not have a thermostat.* 
 
 ```{r}
 boxplot(KWH ~ UATYP10,
         data = cleanRECS,
-        col = terrain.colors(3),
-        xlab = "Rural, Urban, Suburban",
-        ylab = "Kilowatt-Hours")
+        col = terrain.colors(length(unique(cleanRECS$UATYP10))),
+        xlab = "Rural, Urban, & Suburban",
+        ylab = "Kilowatt-Hours",
+        main = "Annual Electricity Use by Home Type")
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$UATYP10, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
-text(x = c(1:3), y = mean, labels = round(mean, 2))
+text(x = c(1:length(unique(cleanRECS$UATYP10))), y = mean, labels = round(mean, 2))
 
 table(cleanRECS$UATYP10)
 
@@ -126,7 +125,7 @@ cleanRECS$HeatOrEat <- as.factor(recode(cleanRECS$SCALEB,
                               '1' = '1', 
                               '0' = '0'))
 ```
-*We then looked at the UATYP10 variable, which indicated if a home is located in a Urban, Suburban, or Rural setting. We decided to create a new variable called Urban Rural which re-coded all suburban values as urban. We did this because we thought the binary Rural v. Non-rural would be interesting to explore and because the suburban and urban values were very similar. We also created a new category called HeatOrEat to capture instances of energy poverty. The HeatOrEat variable is now binary and shows if a household has gone without nessecisties at any point during the year inorder to afford utility bills.*
+*We then looked at the UATYP10 variable, which indicated if a home is located in a Urban, Suburban, or Rural setting. We decided to create a new variable called UrbanRural which re-coded all suburban values as urban. We did this because we thought the binary Rural v. Non-rural would be interesting to explore and because the suburban and urban values were very similar. We also created a new category called HeatOrEat to capture instances of energy poverty. The HeatOrEat variable is now binary and shows if a household has gone without necessities at any point during the year in order to afford utility bills.*
 
 ```{r}
 cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
@@ -161,16 +160,16 @@ cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
 hist(cleanRECS$KWH,
      col = "salmon",
      main = "Distribution of Annual Electricty Use",
-     xlab = "kilowatt hours",
+     xlab = "Kilowatt-hours",
      breaks = 200)
 
 qqPlot(cleanRECS$KWH)
 ```
 
-*Since we will mainly be looking at how different variables impact annual energy consumption in KWH we wanted to ensure the KWH variable was normally distributed. Our histogram and qqplot both indicate the KWH variable is not normally distributed. To remedy this we removed data points below 1500KWH.*
+*Since we will mainly be looking at how different variables impact annual energy consumption in KWH we wanted to ensure the KWH variable was normally distributed. Our histogram and QQ-plot both indicate the KWH variable is not normally distributed. To remedy this we removed data points below 1500KWH.*
 
 ```{r}
-#At the advice of the professor, create a cutoff for KWH < 1500 in order to remove influential variables which are affecting normality. Anything less than 1500 KWH is labeled as NA and then removed. Then KWH is log transformed. 
+#At the advice of the professor, create a cutoff for KWH < 1500 in order to remove influential variables which are affecting normality. Anything households whose annual usage was less than 1500 KWH was re-labeled as NA and then removed. Then KWH is log transformed. 
 cleanRECS$KWH[cleanRECS$KWH < 1500] <- NA
 cleanRECS <- na.omit(cleanRECS)
 
@@ -180,7 +179,7 @@ cleanRECS <- na.omit(cleanRECS)
 hist(cleanRECS$KWH,
      col = "salmon",
      main = "Distribution of Annual Electricty Use",
-     xlab = "kilowatt hours",
+     xlab = "kilowatt-hours",
      breaks = 150)
 
 qqPlot(cleanRECS$KWH)
@@ -193,7 +192,7 @@ cleanRECS$logKWH <- log(cleanRECS$KWH)
 hist(cleanRECS$logKWH,
      col = "salmon",
      main = "Distribution of Log Annual Electricty Use",
-     xlab = "log kilowatt hours",
+     xlab = "log kilowatt-hours",
      breaks = 150)
 
 qqPlot(cleanRECS$logKWH)
@@ -209,44 +208,43 @@ cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
                              '7' = '140000',
                              '8' = 'NA'))
 ```
-*After the log transfortmation the KWH variable was still not perfectly normal but it was much closer and was now more resonable to work with.*
+*After the log transformation the KWH variable was still not perfectly normal but it was much closer and was now more reasonable to work with.*
 
-# General Graphics
+#General Graphics
 
 *To better understand our data set we created various graphics. This helped us visualize what information was being conveyed and what would be interesting to examine more in depth.*
+
 ```{r, include=FALSE}
 #KWH based on census region
 boxplot(KWH ~ REGIONC,
         data = cleanRECS,
         col = terrain.colors(length(unique(cleanRECS$REGIONC))),
-        main = "Kilowatt Hours vs. Climate Region",
+        main = "Kilowatt-Hours vs. Census Region",
         xlab = "Census Region",
         ylab = "Kilowatt-Hours")
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$REGIONC, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$REGIONC))), y = mean, labels = round(mean, 2))
-mtext("Here we see that most regions have similar energy use patterns\n other than the south which has a much higher total energy consumption", side = 1, line = 4, cex = 0.8)
+mtext("Here we see that most regions have similar energy use patterns, besides the south which has a  higher annual mean household energy consumption.", side = 1, line = 4, cex = 0.6)
 
 #KWH Urban v. Rural 
 boxplot(KWH ~ UrbanRural,
         data = cleanRECS,
         col = terrain.colors(length(unique(cleanRECS$UrbanRural))),
-        main = "Kilowatt Hours vs. Urban/Rural Divide",
+        main = "Kilowatt-Hours vs. Urban/Rural Divide",
         xlab = "Rural v. Urban",
         ylab = "Kilowatt-Hours")
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$UrbanRural, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$UrbanRural))), y = mean, labels = round(mean, 2))
-mtext("Rural households seem to have higher energy consumption", side = 1, line = 4, cex = 0.8)
+mtext("Rural households seem to have higher annual energy consumption.", side = 1, line = 4, cex = 0.8)
 
 #KWH v. Annual Cost
 plot(cleanRECS$KWH, cleanRECS$DOLLAREL,
-     main = "Kilowatt Hours vs. Electricty Expenditure",
-     xlab = "Kilowatt Hours (by household)",
+     main = "Kilowatt-Hours vs. Electricty Expenditure",
+     xlab = "Kilowatt-Hours (by household)",
      ylab = "Electricty Expenditure",
      col = "blue")
-
-
 
 ```
 # T-Test 
@@ -270,9 +268,9 @@ boxplot(logKWH ~ UrbanRural,
 ```{r}
 #t.test of KWH and region type 
 (test1 <- t.test(logKWH ~ UrbanRural, data = cleanRECS, conf.level = .95))
-
+test1$p.value < 0.05
 ```
-*The t-test shows us that there is a true difference in means between the rural and urban group with a p-value of 2.2e-16. This small p-value indicated high statistical significant. Thus, WE REJECT THE NULL HYPOTHESIS*
+*The t-test shows us that there is a true difference in means between the rural and urban group with a p-value of 2.2e-16. This small p-value indicated high statistical significant. Thus, WE REJECT THE NULL HYPOTHESIS under a 95% confidence level. (α=0.05).*
 
 #Bootstrapping
 
@@ -293,7 +291,6 @@ for (i in 1:N) {
   sU <- sample(cleanRECS$logKWH[cleanRECS$UrbanRural == "U"],
                sum(cleanRECS$UrbanRural == "U"), replace = TRUE)
 diffvals[i] <- mean((sR)) - mean((sU))
-
 }
 
 ci <- quantile(diffvals, c(0.025, 0.975))
@@ -317,7 +314,6 @@ legend("topleft",
        lwd = 3, 
        col = c("green","red"), 
        lty = c(2,1))
-
 ```
 *Our bootstrapped confidence interval is nearly identical to the original confidence interval, further supporting our rejection of the null hypothesis.*
 
@@ -336,7 +332,8 @@ fakeregion
 boxplot(cleanRECS$logKWH ~ fakeregion,
         main = "Log of Kilowatt-Hours by Fake Regions",
         col = "green",
-        xlab = "Log of Kilowatt-Hours")
+        ylab = "Log of Kilowatt-Hours".
+        xlab = "Fake Regions")
 
 diff0 <- mean(cleanRECS$logKWH[fakeregion == "R"]) - mean(cleanRECS$logKWH[fakeregion == "U"])
 
@@ -356,13 +353,11 @@ hist(diffvals2,
      breaks = 50,)
 abline(v = actualdiff, col = "blue", lwd = 3)
 text(actualdiff - 0.2, 100 , paste("Actual Diff in Log of Kilowatt-Hours =", round(actualdiff,2)),srt = 90)
-
 ```
-
-
+*Our permutation test found no significant difference in the means of two random groupings of households, UNLIKE in our real-world data of urban & suburban households versus rural. This supports reject the null hypothesis of no difference between these two regions.*
 
 #ANCOVA -  Analysis of Covariance 
-*The ANCOVA model used three variables. The dependent variable was a continuous log transformed kilowatt hour variable (logKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >140,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump.*
+*The ANCOVA model used three variables. The dependent variable was a continuous log transformed kilowatt-hour variable (logKWH) and the independent variables were a continuous variable of annual gross income (MONEYPY) and a categorical variable of whether a household had a heat pump (CENACHP). The MONEYPY variable is ordered from lowest income (1 - <20,000 USD) to highest income (8 - >140,000 USD). CENACHP records 'No' for no heat pump and 'Yes' for having a heat pump.*
 
 *   KWH (continuous): on a scale of annual kilowatt-hours used by households in the US in the year 2015
 *   logKWH (continuous): on a log transformed scale of kilowatt-hours used by households in the US in the year 2015
@@ -378,7 +373,7 @@ text(actualdiff - 0.2, 100 , paste("Actual Diff in Log of Kilowatt-Hours =", rou
 	8	- $140,000 or more
 	
 	
-*The ANCOVA model aims to fit a model predicting the continuous variable kilowatt hours 'KWH' based on and the categorical variable of whether households have a heat pump or not 'CENACHP', and whether there is a significant interaction between the continuous variable of annual gross income 'MONEYPY and having a heat pump.* 
+*The ANCOVA model aims to fit a model predicting the continuous variable kilowatt-hours 'KWH' based on and the categorical variable of whether households have a heat pump or not 'CENACHP', and whether there is a significant interaction between the continuous variable of annual gross income 'MONEYPY and having a heat pump.* 
 
 ```{r}
 # Subset the dataset used for the ANCOVA model, clean the data, and check the characteristics of the dataset.
@@ -422,7 +417,7 @@ plot(KWH ~ MONEYPY,
      main = "Scatterplot of Kilowatt-Hours vs. Annual Gross Income",
      ylab = "Kilowatt-Hours")
 ```
-*The initial boxplots indicate that kilowatt hour means vary across annual gross income, and that kilowatt hour means may vary between having or not having a heat pump. The spreads of annual gross income and the presence of a heat pump aren't vastly different. However, boxplots are not a true indication of interactions occurring between variables so other tests need to be completed to verify interactions.* 
+*The initial boxplots indicate that kilowatt-hour means vary across annual gross income, and that kilowatt-hour means may vary between having or not having a heat pump. The spreads of annual gross income and the presence of a heat pump aren't vastly different. However, boxplots are not a true indication of interactions occurring between variables so other tests need to be completed to verify interactions.* 
 
 ## Assumption Verification
 
@@ -456,7 +451,7 @@ boxcoxtrans <- trans1$x[which.max(trans1$y)]
 print(boxcoxtrans)
 
 ```
-*The values in KWH less than 1500 were creating large outliers in the dataset and thus large residuals which were affecting the normality of the errors. At the advice of Professor JDRS, a cutoff was imposed on values less than 1500. Normality of the model for the first 'm1' model fitting  KWH and CENACHP show evidence of non normality from the normal quantile plot which is not linear and evidence of outliers and influential points from the residual plots which show a heavy skew of positive residuals. This model has a r-squared value of 0.1126 meaning 11.3% of the variability of kilowatt hour usage is explained by the presence of a heat pump. The 'CENACHP' variable has a lower p-value of less than 2e-16 meaning it is a statistically significant predictor of kilowatt hours. The second model 'm2' fitting KWH and MONEYPY also show similar evidence of non-normality from a non linear and curved normal quantile plot and residuals heavily positive skewed showing evidence of outliers and influential points. This indicates that the response variable needs some transformation. The 'm2' model has a r-squared value of 0.05207 meaning 5.2% of the predictability of kilowatt-hour usage can be explained by the variable annual gross income or 'MONEYPY'. Like CENACHP, MONEYPY has a low p-value of less than 2e-16 meaning it is a statistically significant predictor. A box cox transformation results in a lambda of 0.18 which is close enough to 0 that we can take a log transformation. *
+*The values in KWH less than 1500 were creating large outliers in the dataset and thus large residuals which were affecting the normality of the errors. At the advice of Professor JDRS, a cutoff was imposed on values less than 1500. Normality of the model for the first 'm1' model fitting  KWH and CENACHP show evidence of non normality from the normal quantile plot which is not linear and evidence of outliers and influential points from the residual plots which show a heavy skew of positive residuals. This model has a r-squared value of 0.1126 meaning 11.3% of the variability of kilowatt-hour usage is explained by the presence of a heat pump. The 'CENACHP' variable has a lower p-value of less than 2e-16 meaning it is a statistically significant predictor of kilowatt-hours. The second model 'm2' fitting KWH and MONEYPY also show similar evidence of non-normality from a non linear and curved normal quantile plot and residuals heavily positive skewed showing evidence of outliers and influential points. This indicates that the response variable needs some transformation. The 'm2' model has a r-squared value of 0.05207 meaning 5.2% of the predictability of kilowatt-hour usage can be explained by the variable annual gross income or 'MONEYPY'. Like CENACHP, MONEYPY has a low p-value of less than 2e-16 meaning it is a statistically significant predictor. A box cox transformation results in a lambda of 0.18 which is close enough to 0 that we can take a log transformation. *
 
 ```{r}
 #Log Transformation 
@@ -483,13 +478,13 @@ ols_plot_cooksd_bar(m4)
 
 
 ##Permutation Test
-*Our permutation test null hypothesis: there is no significant effect to predicting log kilowatt hours by our variables heat pump 'CENACHP', gross annual income 'MONEYPY', and the interaction of heat pumps x gross annual income.*
+*Our permutation test null hypothesis: there is no significant effect to predicting log kilowatt-hours by our variables heat pump 'CENACHP', gross annual income 'MONEYPY', and the interaction of heat pumps x gross annual income.*
 
-*The alternative hypothesis: there is a significant effect on predicting log kilowatt hours by the variable for having a heat pump 'CENACHP'.* 
+*The alternative hypothesis: there is a significant effect on predicting log kilowatt-hour by the variable for having a heat pump 'CENACHP'.* 
 
-*The alternative hypothesis: there is a significant effect on predicting log kilowatt hours by the variable for gross annual income 'MONEYPY'.* 
+*The alternative hypothesis: there is a significant effect on predicting log kilowatt-hour by the variable for gross annual income 'MONEYPY'.* 
 
-*The alternative hypothesis: there is a significant effect on predicting log kilowatt hours by the interactions for having a heat pump 'CENACHP' and gross annual income 'MONEYPY'.* 
+*The alternative hypothesis: there is a significant effect on predicting log kilowatt-hour by the interactions for having a heat pump 'CENACHP' and gross annual income 'MONEYPY'.* 
 
 
 ```{r}
@@ -519,11 +514,11 @@ abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 
 text(x = 4.4, y = 10.8, col = 2,
      paste0("y =", round((anccoef[1] + anccoef[3]), 2), "x + ", round((anccoef[2] + anccoef[4]), 2)))
 ```
-*The final fitted ANCOVA model is the log transformed kilowatt hour variable (logKWH) predicted by annual gross income (MONEYPY), the presence of a heat pump (CENACHP), and the interaction of MONEYPY x CENACHP. The r-squared of this model improved from our separated predictors and our model explains 11.2% of the predictability of transformed kilowatt hours. Each of the predictors have p-values less than our alpha 0.05 meaning they are statistically significant predictors. Additionally, the interaction term between MONEYPY and CENACHP is statistically significant with a p-value of  0.00246. The model indicates that with there is a higher kilowatt usage with a higher gross annual income at a rate of (8.97). The presence of a heat pump means an increase in kilowatt hours at a rate of (8.97 +  0.20 = 9.17). The presence of a heat pump and a higher annual gross income have a increase in kilowatt hour usage at the rate of (8.97 +  0.02 = 8.99) so the effect of the two together is fairly modest. The model has two equations fitted. One for the presence of a heat pump and an increase in gross annual income which is y = 9.17x + 0.08. The base equation without a heat pump and increasing gross annual income is  y = 8.97x + 0.05. This model rejects the null hypothesis that log transformed KWH is not significantly predicted by MONEYPY, CENACHP, and MONEYPY x CENACHP and we can conclude that all the variables are significant predictors of log KWH.* 
+*The final fitted ANCOVA model is the log transformed kilowatt-hour variable (logKWH) predicted by annual gross income (MONEYPY), the presence of a heat pump (CENACHP), and the interaction of MONEYPY x CENACHP. The r-squared of this model improved from our separated predictors and our model explains 11.2% of the predictability of transformed kilowatt-hours. Each of the predictors have p-values less than our alpha 0.05 meaning they are statistically significant predictors. Additionally, the interaction term between MONEYPY and CENACHP is statistically significant with a p-value of  0.00246. The model indicates that with there is a higher kilowatt usage with a higher gross annual income at a rate of (8.97). The presence of a heat pump means an increase in kilowatt-hours at a rate of (8.97 +  0.20 = 9.17). The presence of a heat pump and a higher annual gross income have a increase in kilowatt-hour usage at the rate of (8.97 +  0.02 = 8.99) so the effect of the two together is fairly modest. The model has two equations fitted. One for the presence of a heat pump and an increase in gross annual income which is y = 9.17x + 0.08. The base equation without a heat pump and increasing gross annual income is  y = 8.97x + 0.05. This model rejects the null hypothesis that log transformed KWH is not significantly predicted by MONEYPY, CENACHP, and MONEYPY x CENACHP and we can conclude that all the variables are significant predictors of log KWH.* 
 
 ##GLM AREA 
 ```{r}
-#We see in the below residual plots that neither income nor the residuals of income for predicting the log of energy use are normally distributed. We are not surprised regarding the distribution of income, because it is generally expected to be normally distributed only when transformed in a log scale, and in this case we only have single lines representing income brackets. We therefore go with the standard linear transformation generally used for income variables.
+#We see in the below residual plots that neither income nor the residuals of income for predicting the log of energy use are normally distributed. We are not surprised regarding the distribution of income, because it is generally expected to be normally distributed only when transformed in a log scale, and in this case we only have single lines representing income brackets. We therefore go with the standard linear transformation generally used for income variables. After the log transformation, the income variable was still not normal (due to aforementioned single lines representing income brackets), but it was much closer and was now more reasonable to work with.
 myResPlots2(lm(cleanRECS$IncBracket ~ cleanRECS$logKWH))
 cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
 ```
