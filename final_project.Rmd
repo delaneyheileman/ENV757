@@ -6,10 +6,9 @@ output:
   pdf_document: default
   html_document: default
 ---
-## Introduction - Background and Motivation 
+# Introduction - Background and Motivation 
 
-For this project, we used the 2015 Residential Energy Consumption Survey conducted by the Energy Information Agency. This survey asks a range of questions regarding how much, how often, and what type of energy was used. Our group wanted to examine how various variables impact household electricity usage, in kilowatt-hours.
-
+*For this project, we used the 2015 Residential Energy Consumption Survey conducted by the Energy Information Agency. This survey asks a range of questions regarding how much, how often, and what type of energy was used. Our group wanted to examine how various variables impact household electricity usage, in kilowatt-hours.*
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -25,11 +24,12 @@ library(tidyverse)
 library(ggplot2)
 source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
-## Data - Variables Used
+
 #Setting working directory 
-#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
+
+setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
 #setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-setwd("/Users/elain/Documents/GitHub/ENV757")
+#setwd("/Users/elain/Documents/GitHub/ENV757")
 
 ```
 
@@ -47,9 +47,9 @@ head(recs)
 recs1 <- na.omit(recs[, c("MONEYPY", "ENERGYASST", "REGIONC", "DIVISION","UATYP10", "KOWNRENT", "THERMAIN", "PROTHERM", "TEMPHOME", "AIRCOND","CENACHP", "THERMAINAC", "PROTHERMAC", "TEMPHOMEAC", "HOUSEHOLDER_RACE", "SCALEB", "KWH", "DOLLAREL", "DOLLARNG", "DOLLARLP", "DOLLARFO")])
 ```
 
-This data set originally has 759 different variables and 5686 observations. For our project we decide on 21 variables of interest. Ultimately only using _____ for our final analysis. Below is a table of the variables we selected and what they represent. 
+*This data set originally has 759 different variables and 5686 observations. For our project we decide on 21 variables of interest.  Below is a table of the variables we selected and what they represent.* 
 
-\begin{tabular}{l|r|r|r|r}
+\begin{tabular}{l|r}
 MONEYPY & Household Income\\
 \hline
 ENERGYASST & If Household Received Energy Assitance\\
@@ -95,32 +95,45 @@ DOLLARFO & Dollars spent on other fuels\\
 \end{tabular}
 
 
-
-
 #Data Cleaning
+
+*Our data cleaning was relatively straight forward. For this process we created a data frame called cleanRECS.*
 
 ```{r}
 #Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else
 cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
 
+```
+*We started by removing thermostat values that were "-2" which are coded as "N/A" in the code book. We decided to remove these values because we were only interested in the binary of if someone does or does not have a thermostat.* 
+
+```{r}
+boxplot(KWH ~ UATYP10,
+        data = cleanRECS,
+        col = terrain.colors(3),
+        xlab = "Rural, Urban, Suburban",
+        ylab = "Kilowatt-Hours")
+mean <- round(tapply(cleanRECS$KWH,cleanRECS$UATYP10, mean),0)
+points(mean, col = 'red', pch = 19, cex = 1.2)
+text(x = c(1:3), y = mean, labels = round(mean, 2))
+
+table(cleanRECS$UATYP10)
+
+cleanRECS$UrbanRural <- recode(cleanRECS$UATYP10, 'C' = 'U')
+
+cleanRECS$HeatOrEat <- as.factor(recode(cleanRECS$SCALEB, 
+                              '2' = '1',
+                              '3' = '1',
+                              '1' = '1', 
+                              '0' = '0'))
+```
+*We then looked at the UATYP10 variable, which indicated if a home is located in a Urban, Suburban, or Rural setting. We decided to create a new variable called Urban Rural which re-coded all suburban values as urban. We did this because we thought the binary Rural v. Non-rural would be interesting to explore and because the suburban and urban values were very similar. We also created a new category called HeatOrEat to capture instances of energy poverty. The HeatOrEat variable is now binary and shows if a household has gone without nessecisties at any point during the year inorder to afford utility bills.*
+
+```{r}
 cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
                              '1' = 'Northeast',
                              '2' = 'Midwest',
                              '3' = 'South',
                              '4' = 'West'))
-
-boxplot(KWH ~ UATYP10,
-        data = cleanRECS,
-        col = terrain.colors(8),
-        xlab = "Rural, Urban, Suburban",
-        ylab = "Kilowatt-Hours")
-mean <- round(tapply(cleanRECS$KWH,cleanRECS$UATYP10, mean),0)
-points(mean, col = 'red', pch = 19, cex = 1.2)
-text(x = c(1:8), y = mean, labels = round(mean, 2))
-
-table(cleanRECS$UATYP10)
-cleanRECS$UrbanRural <- recode(cleanRECS$UATYP10, 'C' = 'U')
-
 
 cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
                               '1' = 'New England',
@@ -141,11 +154,49 @@ cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
 cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
                             '1' = 'YES',
                             '0' = 'NO')
+```
+*We then re-coded some of our values with names to so that future graphics would be more legible*
 
+```{r}
+hist(cleanRECS$KWH,
+     col = "salmon",
+     main = "Distribution of Annual Electricty Use",
+     xlab = "kilowatt hours",
+     breaks = 200)
+
+qqPlot(cleanRECS$KWH)
+```
+
+*Since we will mainly be looking at how different variables impact annual energy consumption in KWH we wanted to ensure the KWH variable was normally distributed. Our histogram and qqplot both indicate the KWH variable is not normally distributed. To remedy this we removed data points below 1500KWH.*
+
+```{r}
 #At the advice of the professor, create a cutoff for KWH < 1500 in order to remove influential variables which are affecting normality. Anything less than 1500 KWH is labeled as NA and then removed. Then KWH is log transformed. 
 cleanRECS$KWH[cleanRECS$KWH < 1500] <- NA
 cleanRECS <- na.omit(cleanRECS)
+
+#cleanRECS$KWH[cleanRECS$KWH > 55000] <- NA
+#cleanRECS <- na.omit(cleanRECS)
+
+hist(cleanRECS$KWH,
+     col = "salmon",
+     main = "Distribution of Annual Electricty Use",
+     xlab = "kilowatt hours",
+     breaks = 150)
+
+qqPlot(cleanRECS$KWH)
+```
+*We then checked the histogram and qqplot to see if the KWH variable was normally distributed. Since it was still not normal we decided to take the log of KWH*
+
+```{r}
 cleanRECS$logKWH <- log(cleanRECS$KWH)
+
+hist(cleanRECS$logKWH,
+     col = "salmon",
+     main = "Distribution of Log Annual Electricty Use",
+     xlab = "log kilowatt hours",
+     breaks = 150)
+
+qqPlot(cleanRECS$logKWH)
 
 #Converting the Income Brackets into a numeric variable. Because we do not know the exact variables, we are assuming that each household is at the upper limit of that income bracket, and removing the highest income bracket that has no upper limit to avoid making unbounded assumptions about their incomes.
 cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
@@ -158,12 +209,13 @@ cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
                              '7' = '140000',
                              '8' = 'NA'))
 ```
-
-*Our data cleaning was relatively straight forward. Our main concern was removing thermostat values that were "-2" which are coded as "N/A" in the code book. We also combined the Suburban values with the Urban values. This was done because the Urban and Suburban values are very similar and we wanted to be able to compare rural energy usage with non-rural. From there we re-coded a few variables for the sake of making some graphics more legible.*
-
+*After the log transfortmation the KWH variable was still not perfectly normal but it was much closer and was now more resonable to work with.*
 
 # General Graphics
-```{r}
+
+*To better understand our data set we created various graphics. This helped us visualize what information was being conveyed and what would be interesting to examine more in depth.*
+```{r, include=FALSE}
+#KWH based on census region
 boxplot(KWH ~ REGIONC,
         data = cleanRECS,
         col = terrain.colors(length(unique(cleanRECS$REGIONC))),
@@ -173,7 +225,9 @@ boxplot(KWH ~ REGIONC,
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$REGIONC, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$REGIONC))), y = mean, labels = round(mean, 2))
+mtext("Here we see that most regions have similar energy use patterns\n other than the south which has a much higher total energy consumption", side = 1, line = 4, cex = 0.8)
 
+#KWH Urban v. Rural 
 boxplot(KWH ~ UrbanRural,
         data = cleanRECS,
         col = terrain.colors(length(unique(cleanRECS$UrbanRural))),
@@ -183,38 +237,23 @@ boxplot(KWH ~ UrbanRural,
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$UrbanRural, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$UrbanRural))), y = mean, labels = round(mean, 2))
+mtext("Rural households seem to have higher energy consumption", side = 1, line = 4, cex = 0.8)
 
+#KWH v. Annual Cost
 plot(cleanRECS$KWH, cleanRECS$DOLLAREL,
      main = "Kilowatt Hours vs. Electricty Expenditure",
      xlab = "Kilowatt Hours (by household)",
      ylab = "Electricty Expenditure",
      col = "blue")
+
+
+
 ```
 # T-Test 
 
-After playing around with the data it looked like a t-test based on Kilowatt-Hours based on Rural v. Urban would be interesting. Before continuing we check to see if the data was normally distributed. 
+*After playing around with the data it looked like a t-test based on Kilowatt-Hours based on Rural v. Urban would be interesting. In our data cleaning we already created a logKWH variable, to account for normalcy, so that is what we will be using. We began by looking at a boxplot of the log transformed data* 
 
 ```{r}
-hist(cleanRECS$KWH,
-     col = "salmon",
-     main = "Distribution of Annual Electricty Use",
-     xlab = "kilowatt hours",
-     breaks = 50,)
-qqPlot(cleanRECS$KWH)
-```
-
-The histogram shows that the data is highly right skewed and does not appear to be normally distributed. This is confirmed by our normal quantile plot. The KWH data is not normal, to remedy this we took the log of this data. 
-
-```{r}
-cleanRECS$logKWH <- log(cleanRECS$KWH)
-hist(cleanRECS$logKWH,
-     col = "salmon",
-     main = "Distribution of Log Kilowatt-Hours",
-     xlab = "Log of Kilowatt-hours",
-     breaks = 50,)
-qqPlot(cleanRECS$logKWH) 
-
-#boxplot of log values 
 boxplot(logKWH ~ UrbanRural,
         main = "Log of Annual Electricty Use vs. Urban/Rural Divide",
         ylab = "Log of Kilowatt-Hours",
@@ -222,8 +261,6 @@ boxplot(logKWH ~ UrbanRural,
         col = as.factor(cleanRECS$logKWH),
         xlab = "Rural vs. Urban")
 ```
-
-*After the log transformation the data is still not completely normal, and it appears to now be slightly left skewed. However, the log transformed data is a huge improvement and very close to being normal. We will use this for our t-test.*
 
 *Null hypothesis: There is no difference in KWH usage between the rural and urban groups.*
 
@@ -233,13 +270,13 @@ boxplot(logKWH ~ UrbanRural,
 ```{r}
 #t.test of KWH and region type 
 (test1 <- t.test(logKWH ~ UrbanRural, data = cleanRECS, conf.level = .95))
+
 ```
 *The t-test shows us that there is a true difference in means between the rural and urban group with a p-value of 2.2e-16. This small p-value indicated high statistical significant. Thus, WE REJECT THE NULL HYPOTHESIS*
 
-
 #Bootstrapping
 
-*To further test the KWH usage based on Rural v. Urban settings we will perform boostrapping*
+*To further test the KWH usage based on Rural v. Urban settings we will perform bootstrapping*
 
 ```{r}
 set.seed(230)
