@@ -27,8 +27,8 @@ source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 #Setting working directory 
 #setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
-#setwd("/Users/elain/Documents/GitHub/ENV757")
+#setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+setwd("/Users/elain/Documents/GitHub/ENV757")
 ```
 
 #Loading Data 
@@ -375,4 +375,5 @@ text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value ≈ ", rou
 text(x = 10.95, y = 5.30, col = 1, "for households of similar incomes.")
 ```
 
-
+#Summary and Conclusion
+*In our investigation of variables relating to annual energy consumption of households by kilowatt hours, we conducted a t-test, ANCOVA, and Generalized linear model using kilowatt hours as our dependent variable. The t-test was based on kilowatt hours and compared the true difference in means between the rural and urban group. The t-test, bootstrapping, and permutation test all led us to conclude that there is a statistically significant mean difference between the two groups. The ANCOVA test aimed to show that the continuous variable of annual gross income and the categorical variable of owning a heat pump and their interaction would affect annual energy consumption by kilowatt hours. Our results for showed that log kilowatt hours can be predicted by the aforementioned variables and their interaction. And a higher gross income and presence of a heat pump result in higher log kilowatt hours of energy consumption. Generalized linear models generally speaking are used to explain a linear relationship between two (or more) continuous variables. To see if this was appropriate for modeling annual household energy usage, we ran a best subsets regression that sequentially removed variables that were not significant predictors. This found that there were no continuous variables predictive of annual energy use. Our figure, therefore, is to demonstrate that a linear model would NOT be predictive of energy use; only rural vs. urban was.*
