@@ -26,8 +26,8 @@ library(ggplot2)
 source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
 #Setting working directory 
-setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
-#setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
+#setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
+setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
 #setwd("/Users/elain/Documents/GitHub/ENV757")
 ```
 
