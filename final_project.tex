@@ -1,0 +1,1575 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Final Project},
+  pdfauthor={Delaney Heileman},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Final Project}
+\author{Delaney Heileman}
+\date{4/26/2022}
+
+\begin{document}
+\maketitle
+
+\#Introduction - Background and Motivation
+
+\emph{For this project, we used the 2015 Residential Energy Consumption
+Survey conducted by the Energy Information Agency. This survey asks a
+range of questions regarding how much, how often, and what type of
+energy was used. Our group wanted to examine how various variables
+impact household electricity usage, in kilowatt-hours.}
+
+\#Loading Data
+
+\emph{This data set originally has 759 different variables and 5686
+observations. For our project we decide on 21 variables of interest.
+Below is a table of the variables we selected and what they represent.}
+
+\begin{tabular}{l|r}
+MONEYPY & Household Income\\
+\hline
+ENERGYASST & If Household Received Energy Assitance\\
+\hline
+REGIONC & Region\\
+\hline
+DIVISION & Census Division\\
+\hline
+UATYP10 & Urban or Rural\\
+\hline
+KOWNRENT & Owner or Renter\\
+\hline
+THERMAIN & Is there a thermostat?\\
+\hline
+PROTHERM & Is there a programable thermostat?\\
+\hline
+TEMPHOME & Temperature of the home, during the winter when someone is home\\
+\hline
+AIRCOND & Is there an air conditioner?\\
+\hline
+CENACHP & Is the AC a heatpump?\\
+\hline
+THERMAINAC & Is there an AC thermostat?\\
+\hline
+PROTHERMAC & Is the AC thermostat programable?\\
+\hline
+TEMPHOMEAC & Temperature of the home, during the winter when someone is home\\
+\hline
+HOUSEHOLDER_RACE & Race of householder\\
+\hline
+SCALEB & Frequency of reducing or forgoing basic necessities due to home energy bill\\
+\hline
+KWH & Total Kilowatt-Hours used in 2015\\
+\hline
+DOLLAREL & Dollars spent on electricity\\
+\hline
+DOLLARNG & Dollars spent on natural gas\\
+\hline
+DOLLARLP & Dollars spent on liquid petroleum\\
+\hline
+DOLLARFO & Dollars spent on other fuels\\
+\hline
+\end{tabular}
+
+\#Data Cleaning
+
+\emph{Our data cleaning was relatively straight forward. For this
+process we created a data frame called cleanRECS.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Removing "not applicable" answers for thermostat questions. N/a for Thermostat likely means they use wood fire or something else}
+\NormalTok{cleanRECS }\OtherTok{\textless{}{-}}\NormalTok{ recs1[recs1}\SpecialCharTok{$}\NormalTok{THERMAIN }\SpecialCharTok{!=} \SpecialCharTok{{-}}\DecValTok{2} \SpecialCharTok{\&}\NormalTok{ recs1}\SpecialCharTok{$}\NormalTok{THERMAINAC }\SpecialCharTok{!=} \StringTok{"{-}2"}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{We started by removing thermostat values that were ``-2'' which
+are coded as ``N/A'' in the code book. We decided to remove these values
+because we were only interested in the binary of if someone does or does
+not have a thermostat.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(KWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ UATYP10,}
+        \AttributeTok{data =}\NormalTok{ cleanRECS,}
+        \AttributeTok{col =} \FunctionTok{terrain.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UATYP10))),}
+        \AttributeTok{xlab =} \StringTok{"Rural, Urban, \& Suburban"}\NormalTok{,}
+        \AttributeTok{ylab =} \StringTok{"Kilowatt{-}Hours"}\NormalTok{,}
+        \AttributeTok{main =} \StringTok{"Annual Electricity Use by Home Type"}\NormalTok{)}
+\NormalTok{mean }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{tapply}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{KWH,cleanRECS}\SpecialCharTok{$}\NormalTok{UATYP10, mean),}\DecValTok{0}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(mean, }\AttributeTok{col =} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{cex =} \FloatTok{1.2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UATYP10))), }\AttributeTok{y =}\NormalTok{ mean, }\AttributeTok{labels =} \FunctionTok{round}\NormalTok{(mean, }\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UATYP10)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##    C    R    U 
+##  382  707 2593
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UATYP10, }\StringTok{\textquotesingle{}C\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}U\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{HeatOrEat }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(}\FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{SCALEB, }
+                              \StringTok{\textquotesingle{}2\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}1\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}3\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}1\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}1\textquotesingle{}}\NormalTok{, }
+                              \StringTok{\textquotesingle{}0\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}0\textquotesingle{}}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{We then looked at the UATYP10 variable, which indicated if a home
+is located in a Urban, Suburban, or Rural setting. We decided to create
+a new variable called UrbanRural which re-coded all suburban values as
+urban. We did this because we thought the binary Rural v. Non-rural
+would be interesting to explore and because the suburban and urban
+values were very similar. We also created a new category called
+HeatOrEat to capture instances of energy poverty. The HeatOrEat variable
+is now binary and shows if a household has gone without necessities at
+any point during the year in order to afford utility bills.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{REGIONC }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(}\FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{REGIONC,}
+                             \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}Northeast\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}2\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}Midwest\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}3\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}South\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}4\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}West\textquotesingle{}}\NormalTok{))}
+
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{DIVISION }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(}\FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{DIVISION,}
+                              \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}New England\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}2\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}Mid Atlantic\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}3\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}East North Central\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}4\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}West North Central\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}5\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}South Atlantic\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}6\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}East South Central\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}7\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}West South Central\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}8\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}Mountain North\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}9\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}Mountain South\textquotesingle{}}\NormalTok{,}
+                              \StringTok{\textquotesingle{}10\textquotesingle{}}\OtherTok{=} \StringTok{\textquotesingle{}Pacific\textquotesingle{}}\NormalTok{))}
+
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{CENACHP }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{CENACHP,}
+                            \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}YES\textquotesingle{}}\NormalTok{,}
+                            \StringTok{\textquotesingle{}0\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}NO\textquotesingle{}}\NormalTok{)}
+\CommentTok{\#recoding energy assistance variable to yes or no value}
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{ENERGYASST }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{ENERGYASST,}
+                            \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}YES\textquotesingle{}}\NormalTok{,}
+                            \StringTok{\textquotesingle{}0\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}NO\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{We then re-coded some of our values with names to so that future
+graphics would be more legible}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{KWH,}
+     \AttributeTok{col =} \StringTok{"salmon"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Distribution of Annual Electricty Use"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Kilowatt{-}hours"}\NormalTok{,}
+     \AttributeTok{breaks =} \DecValTok{200}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqPlot}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{KWH)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-5-2.pdf}
+
+\begin{verbatim}
+## [1] 717 477
+\end{verbatim}
+
+\emph{Since we will mainly be looking at how different variables impact
+annual energy consumption in KWH we wanted to ensure the KWH variable
+was normally distributed. Our histogram and QQ-plot both indicate the
+KWH variable is not normally distributed. To remedy this we removed data
+points below 1500KWH.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#At the advice of the professor, create a cutoff for KWH \textless{} 1500 in order to remove influential variables which are affecting normality. Anything households whose annual usage was less than 1500 KWH was re{-}labeled as NA and then removed. Then KWH is log transformed. }
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{KWH[cleanRECS}\SpecialCharTok{$}\NormalTok{KWH }\SpecialCharTok{\textless{}} \DecValTok{1500}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{cleanRECS }\OtherTok{\textless{}{-}} \FunctionTok{na.omit}\NormalTok{(cleanRECS)}
+
+\CommentTok{\#cleanRECS$KWH[cleanRECS$KWH \textgreater{} 55000] \textless{}{-} NA}
+\CommentTok{\#cleanRECS \textless{}{-} na.omit(cleanRECS)}
+
+\FunctionTok{hist}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{KWH,}
+     \AttributeTok{col =} \StringTok{"salmon"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Distribution of Annual Electricty Use"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"kilowatt{-}hours"}\NormalTok{,}
+     \AttributeTok{breaks =} \DecValTok{150}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqPlot}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{KWH)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+\begin{verbatim}
+## [1] 715 476
+\end{verbatim}
+
+\emph{We then checked the histogram and qqplot to see if the KWH
+variable was normally distributed. Since it was still not normal we
+decided to take the log of KWH}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{KWH)}
+
+\FunctionTok{hist}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH,}
+     \AttributeTok{col =} \StringTok{"salmon"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Distribution of Log Annual Electricty Use"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"log kilowatt{-}hours"}\NormalTok{,}
+     \AttributeTok{breaks =} \DecValTok{150}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqPlot}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\begin{verbatim}
+## [1] 1179   73
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Converting the Income Brackets into a numeric variable. Because we do not know the exact variables, we are assuming that each household is at the upper limit of that income bracket, and removing the highest income bracket that has no upper limit to avoid making unbounded assumptions about their incomes.}
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{IncBracket }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{recode}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{MONEYPY,}
+                             \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}20000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}2\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}40000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}3\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}60000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}4\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}80000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}5\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}100000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}6\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}120000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}7\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}140000\textquotesingle{}}\NormalTok{,}
+                             \StringTok{\textquotesingle{}8\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}NA\textquotesingle{}}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: NAs introduced by coercion
+\end{verbatim}
+
+\emph{After the log transformation the KWH variable was still not
+perfectly normal but it was much closer and was now more reasonable to
+work with.}
+
+\#General Graphics
+
+\emph{To better understand our data set we created various graphics.
+This helped us visualize what information was being conveyed and what
+would be interesting to examine more in depth.}
+
+\hypertarget{t-test}{%
+\section{T-Test}\label{t-test}}
+
+\emph{After playing around with the data it looked like a t-test based
+on Kilowatt-Hours based on Rural v. Urban would be interesting. In our
+data cleaning we already created a logKWH variable, to account for
+normalcy, so that is what we will be using. We began by looking at a
+boxplot of the log transformed data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ UrbanRural,}
+        \AttributeTok{main =} \StringTok{"Log of Annual Electricty Use vs. Urban/Rural Divide"}\NormalTok{,}
+        \AttributeTok{ylab =} \StringTok{"Log of Kilowatt{-}Hours"}\NormalTok{,}
+        \AttributeTok{data =}\NormalTok{ cleanRECS,}
+        \AttributeTok{col =} \FunctionTok{as.factor}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH),}
+        \AttributeTok{xlab =} \StringTok{"Rural vs. Urban"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\emph{Null hypothesis: There is no difference in KWH usage between the
+rural and urban groups.}
+
+\emph{Alternative hypothesis: There is a difference in KWH usage between
+the rural and urban groups.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#t.test of KWH and region type }
+\NormalTok{(test1 }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ UrbanRural, }\AttributeTok{data =}\NormalTok{ cleanRECS, }\AttributeTok{conf.level =}\NormalTok{ .}\DecValTok{95}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  logKWH by UrbanRural
+## t = 16.178, df = 1153.2, p-value < 2.2e-16
+## alternative hypothesis: true difference in means between group R and group U is not equal to 0
+## 95 percent confidence interval:
+##  0.3173262 0.4049172
+## sample estimates:
+## mean in group R mean in group U 
+##        9.554033        9.192912
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test1}\SpecialCharTok{$}\NormalTok{p.value }\SpecialCharTok{\textless{}} \FloatTok{0.05}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\emph{The t-test shows us that there is a true difference in means
+between the rural and urban group with a p-value of 2.2e-16. This small
+p-value indicated high statistical significant. Thus, WE REJECT THE NULL
+HYPOTHESIS under a 95\% confidence level. (α=0.05).}
+
+\#Bootstrapping
+
+\emph{To further test the KWH usage based on Rural v. Urban settings we
+will perform bootstrapping}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{230}\NormalTok{)}
+
+\NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{sR }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, N)}
+\NormalTok{sU }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, N)}
+\NormalTok{diffvals }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, N)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{N) \{}
+\NormalTok{  sR }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH[cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural }\SpecialCharTok{==} \StringTok{"R"}\NormalTok{],}
+               \FunctionTok{sum}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural }\SpecialCharTok{==} \StringTok{"R"}\NormalTok{), }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+
+\NormalTok{  sU }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH[cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural }\SpecialCharTok{==} \StringTok{"U"}\NormalTok{],}
+               \FunctionTok{sum}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural }\SpecialCharTok{==} \StringTok{"U"}\NormalTok{), }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{diffvals[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{((sR)) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{((sU))}
+\NormalTok{\}}
+
+\NormalTok{ci }\OtherTok{\textless{}{-}} \FunctionTok{quantile}\NormalTok{(diffvals, }\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{))}
+\FunctionTok{print}\NormalTok{(}\StringTok{"Bootstrapped Confidence Intervals"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Bootstrapped Confidence Intervals"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{round}\NormalTok{(ci, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  2.5% 97.5% 
+##  0.32  0.41
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\StringTok{"Original Confidence Intervals"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Original Confidence Intervals"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{round}\NormalTok{(test1}\SpecialCharTok{$}\NormalTok{conf.int,}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.32 0.40
+## attr(,"conf.level")
+## [1] 0.95
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(diffvals, }
+     \AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }
+     \AttributeTok{main =} \StringTok{"Bootstrapped Sample Means Diff in Annual Electricity Use"}\NormalTok{, }
+     \AttributeTok{xlab =} \StringTok{"Kilowatt{-}hours"}\NormalTok{, }
+     \AttributeTok{breaks =} \DecValTok{50}\NormalTok{)}
+
+\CommentTok{\#Add lines to histogram for CI\textquotesingle{}s}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v =}\NormalTok{ ci, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v =}\NormalTok{ test1}\SpecialCharTok{$}\NormalTok{conf.int, }\AttributeTok{lwd =} \DecValTok{3}\NormalTok{, }\AttributeTok{col =} \StringTok{"green"}\NormalTok{, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }
+       \FunctionTok{c}\NormalTok{(}\StringTok{"Original CI"}\NormalTok{,}\StringTok{"Boot CI"}\NormalTok{), }
+       \AttributeTok{lwd =} \DecValTok{3}\NormalTok{, }
+       \AttributeTok{col =} \FunctionTok{c}\NormalTok{(}\StringTok{"green"}\NormalTok{,}\StringTok{"red"}\NormalTok{), }
+       \AttributeTok{lty =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-11-1.pdf}
+\emph{Our bootstrapped confidence interval is nearly identical to the
+original confidence interval, further supporting our rejection of the
+null hypothesis.}
+
+\#Permutation Test
+
+\emph{To further examine the difference in KWH usage between rural and
+urban groups we performed a permutation test.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{rm}\NormalTok{(mean)}
+\NormalTok{(actualdiff }\OtherTok{\textless{}{-}} \FunctionTok{by}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH, cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural, mean))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## cleanRECS$UrbanRural: R
+## [1] 9.554033
+## ------------------------------------------------------------ 
+## cleanRECS$UrbanRural: U
+## [1] 9.192912
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{(actualdiff }\OtherTok{\textless{}{-}}\NormalTok{ actualdiff[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{{-}}\NormalTok{ actualdiff[}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         R 
+## 0.3611217
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fakeregion }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural) }\CommentTok{\# default is replace = FALSE {-} this is a PERMUTATION (a reordering) of the age group assignments}
+\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]  1  8  9  3  6  5 10  4  2  7
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fakeregion}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    [1] "R" "R" "R" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "R"
+##   [19] "U" "U" "U" "U" "R" "U" "R" "R" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U"
+##   [37] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+##   [55] "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "R" "R"
+##   [73] "U" "U" "U" "R" "U" "R" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U"
+##   [91] "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U"
+##  [109] "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+##  [127] "R" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+##  [145] "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U"
+##  [163] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [181] "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+##  [199] "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "R" "U" "U"
+##  [217] "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U"
+##  [235] "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U"
+##  [253] "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+##  [271] "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U"
+##  [289] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+##  [307] "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U"
+##  [325] "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [343] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+##  [361] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "R" "U"
+##  [379] "R" "U" "U" "R" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "R" "U" "R" "R"
+##  [397] "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+##  [415] "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R"
+##  [433] "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+##  [451] "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "R"
+##  [469] "U" "R" "R" "U" "R" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "R" "U" "R"
+##  [487] "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U"
+##  [505] "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [523] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+##  [541] "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U"
+##  [559] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R"
+##  [577] "R" "R" "U" "U" "U" "U" "R" "U" "U" "R" "R" "U" "U" "U" "R" "U" "U" "R"
+##  [595] "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U"
+##  [613] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "R" "U"
+##  [631] "U" "U" "R" "R" "U" "U" "R" "U" "R" "U" "U" "R" "U" "R" "U" "U" "U" "U"
+##  [649] "U" "U" "U" "R" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [667] "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [685] "U" "U" "R" "R" "R" "U" "U" "U" "U" "U" "R" "U" "R" "R" "R" "U" "U" "U"
+##  [703] "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+##  [721] "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U"
+##  [739] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "R"
+##  [757] "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U"
+##  [775] "U" "U" "R" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U"
+##  [793] "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "R" "R" "R" "U" "U" "U" "U" "R"
+##  [811] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "R" "U"
+##  [829] "U" "R" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [847] "U" "R" "U" "U" "U" "R" "U" "R" "R" "U" "U" "R" "U" "U" "R" "U" "U" "U"
+##  [865] "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "R" "U"
+##  [883] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [901] "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "R" "U" "R" "R" "U"
+##  [919] "R" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U"
+##  [937] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "R" "U" "U" "U" "U" "U" "U"
+##  [955] "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U"
+##  [973] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+##  [991] "R" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "R"
+## [1009] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1027] "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [1045] "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "R" "U" "U"
+## [1063] "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1081] "U" "R" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U"
+## [1099] "U" "R" "U" "U" "R" "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "R" "U"
+## [1117] "U" "U" "U" "U" "R" "R" "R" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+## [1135] "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "R" "R" "R" "U" "U" "U" "U"
+## [1153] "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U"
+## [1171] "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U"
+## [1189] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U"
+## [1207] "R" "U" "R" "U" "R" "R" "U" "U" "R" "U" "R" "U" "U" "R" "U" "U" "U" "U"
+## [1225] "R" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1243] "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1261] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "R" "U" "U" "U"
+## [1279] "U" "U" "R" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1297] "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [1315] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "R" "U" "R" "U" "U" "U"
+## [1333] "U" "U" "R" "U" "U" "R" "R" "U" "U" "U" "U" "U" "R" "U" "R" "R" "U" "U"
+## [1351] "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R"
+## [1369] "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "R" "R" "U" "U"
+## [1387] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U"
+## [1405] "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [1423] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U"
+## [1441] "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1459] "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U"
+## [1477] "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1495] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U"
+## [1513] "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "R" "U" "U" "U" "U" "R"
+## [1531] "U" "U" "U" "U" "U" "U" "U" "R" "R" "R" "U" "R" "U" "U" "U" "U" "R" "U"
+## [1549] "U" "R" "U" "U" "R" "R" "R" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1567] "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U"
+## [1585] "U" "R" "U" "U" "R" "U" "U" "R" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1603] "U" "U" "R" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U"
+## [1621] "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [1639] "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U"
+## [1657] "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "R" "R" "U" "U"
+## [1675] "R" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1693] "U" "U" "U" "R" "U" "U" "R" "U" "U" "R" "U" "R" "U" "U" "R" "U" "U" "U"
+## [1711] "U" "R" "R" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U"
+## [1729] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U"
+## [1747] "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [1765] "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1783] "U" "U" "U" "R" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1801] "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "R" "R" "U" "R" "U"
+## [1819] "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+## [1837] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1855] "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [1873] "R" "U" "U" "U" "R" "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U"
+## [1891] "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U"
+## [1909] "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [1927] "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "R" "U" "U" "U"
+## [1945] "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U"
+## [1963] "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [1981] "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U"
+## [1999] "R" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U"
+## [2017] "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "R" "U" "U" "U" "U" "U" "U" "R"
+## [2035] "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [2053] "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "R"
+## [2071] "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [2089] "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U"
+## [2107] "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "R" "R" "R" "U" "R" "U"
+## [2125] "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U"
+## [2143] "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "R" "R" "U" "U"
+## [2161] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [2179] "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U"
+## [2197] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R"
+## [2215] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [2233] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [2251] "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U"
+## [2269] "U" "U" "U" "U" "U" "R" "U" "R" "U" "R" "R" "R" "R" "U" "U" "U" "U" "R"
+## [2287] "U" "U" "U" "R" "U" "R" "R" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [2305] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U"
+## [2323] "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U"
+## [2341] "U" "R" "R" "R" "R" "U" "U" "R" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U"
+## [2359] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U"
+## [2377] "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [2395] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [2413] "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [2431] "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U"
+## [2449] "U" "U" "R" "U" "U" "R" "U" "U" "U" "R" "U" "U" "R" "U" "R" "U" "R" "R"
+## [2467] "R" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [2485] "U" "R" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U"
+## [2503] "U" "U" "R" "U" "U" "U" "R" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U"
+## [2521] "U" "U" "U" "R" "U" "U" "R" "R" "U" "U" "U" "U" "R" "U" "U" "U" "R" "R"
+## [2539] "U" "U" "R" "R" "U" "U" "U" "R" "U" "U" "U" "R" "U" "R" "R" "R" "U" "U"
+## [2557] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "R" "U"
+## [2575] "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [2593] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "R"
+## [2611] "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [2629] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+## [2647] "U" "R" "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [2665] "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [2683] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "R" "U"
+## [2701] "U" "U" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [2719] "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U"
+## [2737] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "R" "U" "U" "U"
+## [2755] "U" "U" "R" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U"
+## [2773] "U" "U" "R" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+## [2791] "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U"
+## [2809] "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U"
+## [2827] "U" "U" "U" "U" "U" "R" "R" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R"
+## [2845] "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U"
+## [2863] "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [2881] "R" "U" "R" "U" "R" "R" "R" "U" "R" "U" "R" "U" "U" "R" "U" "U" "U" "U"
+## [2899] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R"
+## [2917] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U"
+## [2935] "U" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "R"
+## [2953] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U"
+## [2971] "U" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [2989] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3007] "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3025] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [3043] "R" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+## [3061] "U" "R" "R" "U" "U" "U" "U" "U" "R" "R" "U" "R" "U" "U" "U" "R" "U" "U"
+## [3079] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U"
+## [3097] "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [3115] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3133] "R" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U"
+## [3151] "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R"
+## [3169] "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "R" "U" "U" "R"
+## [3187] "U" "R" "U" "U" "U" "U" "R" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U"
+## [3205] "R" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3223] "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3241] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R"
+## [3259] "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "R"
+## [3277] "U" "U" "R" "U" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U" "U"
+## [3295] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "R" "U" "U"
+## [3313] "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3331] "U" "U" "R" "U" "R" "U" "R" "U" "U" "U" "U" "R" "U" "U" "U" "R" "U" "U"
+## [3349] "U" "R" "R" "U" "R" "U" "U" "R" "R" "U" "U" "U" "U" "U" "R" "U" "U" "U"
+## [3367] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U"
+## [3385] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U"
+## [3403] "U" "U" "U" "U" "U" "R" "R" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "U"
+## [3421] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "R" "U" "U" "U"
+## [3439] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R" "U" "R" "U" "U" "R" "U" "U"
+## [3457] "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "R" "U" "U" "U" "U"
+## [3475] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "R"
+## [3493] "U" "U" "U" "U" "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3511] "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R"
+## [3529] "U" "U" "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "R" "R" "R"
+## [3547] "R" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "U"
+## [3565] "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "R" "U" "R" "U" "U" "U"
+## [3583] "U" "U" "U" "R" "U" "R" "U" "U" "R" "U" "U" "U" "U" "U" "U" "R" "R" "U"
+## [3601] "U" "U" "R" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "U" "R" "R" "R"
+## [3619] "R" "U" "U" "U" "U" "U" "U" "R" "U" "R" "U" "R" "U" "U" "R" "U" "R" "U"
+## [3637] "U" "U" "U" "R" "R" "U" "U" "U" "U" "R" "R" "R" "U" "U" "U" "U" "U" "U"
+## [3655] "U" "U" "U" "U" "U" "U" "U" "U" "U" "U" "R" "U" "U" "R" "U" "U" "U"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ fakeregion,}
+        \AttributeTok{main =} \StringTok{"Log of Kilowatt{-}Hours by Fake Regions"}\NormalTok{,}
+        \AttributeTok{col =} \StringTok{"green"}\NormalTok{,}
+        \AttributeTok{ylab =} \StringTok{"Log of Kilowatt{-}Hours"}\NormalTok{,}
+        \AttributeTok{xlab =} \StringTok{"Fake Regions"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diff0 }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH[fakeregion }\SpecialCharTok{==} \StringTok{"R"}\NormalTok{]) }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH[fakeregion }\SpecialCharTok{==} \StringTok{"U"}\NormalTok{])}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{diffvals2 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, N)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{N) \{}
+\NormalTok{  fakeregion }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural)  }\CommentTok{\# default is replace = FALSE}
+\NormalTok{  diffvals2[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH[fakeregion }\SpecialCharTok{==} \StringTok{"R"}\NormalTok{]) }\SpecialCharTok{{-}}  \FunctionTok{mean}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH[fakeregion }\SpecialCharTok{==} \StringTok{"U"}\NormalTok{])}
+\NormalTok{\}}
+
+\CommentTok{\#Make histogram of permuted mean differences}
+\FunctionTok{hist}\NormalTok{(diffvals2,}
+     \AttributeTok{col =} \StringTok{"yellow"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Permuted Sample Means Diff in Log of Annual Electricty Use"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Log of Kilowatt{-}Hours"}\NormalTok{,}
+     \AttributeTok{breaks =} \DecValTok{50}\NormalTok{,)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v =}\NormalTok{ actualdiff, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(actualdiff }\SpecialCharTok{{-}} \FloatTok{0.2}\NormalTok{, }\DecValTok{100}\NormalTok{ , }\FunctionTok{paste}\NormalTok{(}\StringTok{"Actual Diff in Log of Kilowatt{-}Hours ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(actualdiff,}\DecValTok{2}\NormalTok{)),}\AttributeTok{srt =} \DecValTok{90}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-12-2.pdf}
+\emph{Our permutation test found no significant difference in the means
+of two random groupings of households, UNLIKE in our real-world data of
+urban \& suburban households versus rural. This supports reject the null
+hypothesis of no difference between these two regions.}
+
+\#ANCOVA - Analysis of Covariance \emph{The ANCOVA model used three
+variables. The dependent variable was a continuous log transformed
+kilowatt-hour variable (logKWH) and the independent variables were a
+continuous variable of annual gross income (MONEYPY) and a categorical
+variable of whether a household had a heat pump (CENACHP). The MONEYPY
+variable is ordered from lowest income (1 - \textless20,000 USD) to
+highest income (8 - \textgreater140,000 USD). CENACHP records `No' for
+no heat pump and `Yes' for having a heat pump.}
+
+\begin{itemize}
+\tightlist
+\item
+  KWH (continuous): on a scale of annual kilowatt-hours used by
+  households in the US in the year 2015
+\item
+  logKWH (continuous): on a log transformed scale of kilowatt-hours used
+  by households in the US in the year 2015
+\item
+  CENACHP (categorical): the presence of a heat pump ``Yes'' or ``No''
+\item
+  MONEYPY (continuous): Gross annual income of a household in the year
+  2015. 8 levels.\\
+  1 - Less than \$20,000 2 - \$20,000 to \$39,999 3 - \$40,000 to
+  \$59,999 4 - \$60,000 to \$79,999 5 - \$80,000 to \$99,999 6 -
+  \$100,000 to \$119,999 7 - \$120,000 to \$139,999 8 - \$140,000 or
+  more
+\end{itemize}
+
+\emph{The ANCOVA model aims to fit a model predicting the continuous
+variable kilowatt-hours `KWH' based on and the categorical variable of
+whether households have a heat pump or not `CENACHP', and whether there
+is a significant interaction between the continuous variable of annual
+gross income 'MONEYPY and having a heat pump.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Subset the dataset used for the ANCOVA model, clean the data, and check the characteristics of the dataset.}
+
+\NormalTok{ancmod }\OtherTok{\textless{}{-}}\NormalTok{ cleanRECS[}\FunctionTok{c}\NormalTok{(}\StringTok{"KWH"}\NormalTok{, }\StringTok{"MONEYPY"}\NormalTok{, }\StringTok{"CENACHP"}\NormalTok{)]}
+
+\NormalTok{ancmod}\SpecialCharTok{$}\NormalTok{CENACHP }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(ancmod}\SpecialCharTok{$}\NormalTok{CENACHP)}
+
+\FunctionTok{dim}\NormalTok{(ancmod)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3671    3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{str}\NormalTok{(ancmod)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    3671 obs. of  3 variables:
+##  $ KWH    : num  5271 19655 9853 3116 2398 ...
+##  $ MONEYPY: int  8 2 3 3 4 5 6 2 6 7 ...
+##  $ CENACHP: Factor w/ 2 levels "NO","YES": 1 1 1 1 2 1 1 1 1 1 ...
+\end{verbatim}
+
+\hypertarget{exploratory-data-analysis}{%
+\subsection{Exploratory Data Analysis}\label{exploratory-data-analysis}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Create initial exploratory boxplots and scatterplots to determine whether the spread and the means of the data indicate similar variance or evidence of related variables. Only a scatterplot is made for KWH vs. MONEYPY because they are the only continuous variables.  }
+
+\FunctionTok{attach}\NormalTok{(ancmod)}
+\FunctionTok{boxplot}\NormalTok{(KWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ MONEYPY,}
+        \AttributeTok{data =}\NormalTok{ ancmod,}
+        \AttributeTok{col =} \FunctionTok{terrain.colors}\NormalTok{(}\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(ancmod}\SpecialCharTok{$}\NormalTok{MONEYPY))),}
+        \AttributeTok{xlab =} \StringTok{"Annual Gross Income"}\NormalTok{,}
+        \AttributeTok{ylab =} \StringTok{"Kilowatt{-}Hours"}\NormalTok{,}
+        \AttributeTok{main =} \StringTok{"Annual Household Energy Use by Income"}\NormalTok{)}
+\NormalTok{means1 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{tapply}\NormalTok{(KWH, MONEYPY, mean),}\DecValTok{1}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(means1, }\AttributeTok{col =} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{cex =} \FloatTok{1.2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{), }\AttributeTok{y =}\NormalTok{ means1, }\AttributeTok{labels =} \FunctionTok{round}\NormalTok{(means1, }\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(KWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ CENACHP,}
+        \AttributeTok{data =}\NormalTok{ ancmod,}
+        \AttributeTok{col =} \FunctionTok{c}\NormalTok{(}\StringTok{"red3"}\NormalTok{, }\StringTok{"green3"}\NormalTok{),}
+        \AttributeTok{xlab =} \StringTok{"Heat Pump"}\NormalTok{,}
+        \AttributeTok{ylab =} \StringTok{"Kilowatt{-}Hours"}\NormalTok{,}
+        \AttributeTok{main =} \StringTok{"Annual Household Energy Use by Heatpump or None"}\NormalTok{)}
+\NormalTok{means2 }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{tapply}\NormalTok{(KWH,CENACHP, mean),}\DecValTok{1}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(means1, }\AttributeTok{col =} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{cex =} \FloatTok{1.2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(ancmod}\SpecialCharTok{$}\NormalTok{MONEYPY))), }\AttributeTok{y =}\NormalTok{ means2, }\AttributeTok{labels =} \FunctionTok{round}\NormalTok{(means2, }\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-14-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(KWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ MONEYPY,}
+     \AttributeTok{data =}\NormalTok{ ancmod,}
+     \AttributeTok{col =} \StringTok{"plum4"}\NormalTok{,}
+     \AttributeTok{pch =} \DecValTok{21}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Annual Gross Income"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Scatterplot of Kilowatt{-}Hours vs. Annual Gross Income"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Kilowatt{-}Hours"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-14-3.pdf}
+\emph{The initial boxplots indicate that kilowatt-hour means vary across
+annual gross income, and that kilowatt-hour means may vary between
+having or not having a heat pump. The spreads of annual gross income and
+the presence of a heat pump aren't vastly different. However, boxplots
+are not a true indication of interactions occurring between variables so
+other tests need to be completed to verify interactions.}
+
+\hypertarget{assumption-verification}{%
+\subsection{Assumption Verification}\label{assumption-verification}}
+
+\emph{The following assumptions must be met in order to proceed with an
+ANCOVA analysis: the dependent variables should be normally distributed,
+data should have approximately the same variance.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Check Variance Assumption}
+\NormalTok{stdev2 }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{(KWH, CENACHP, sd)}
+\FunctionTok{round}\NormalTok{(}\FunctionTok{max}\NormalTok{(stdev2)}\SpecialCharTok{/}\FunctionTok{min}\NormalTok{(stdev2),}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{round}\NormalTok{(}\FunctionTok{max}\NormalTok{(stdev2)}\SpecialCharTok{/}\FunctionTok{min}\NormalTok{(stdev2),}\DecValTok{1}\NormalTok{) }\SpecialCharTok{\textless{}=} \DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\emph{The variances of KWH and CENACHP are 1.2 so less than 2 thus we
+satisfy the equal variances assumption to conduct an ANCOVA test. We
+don't run this test on MONEYPY because the test would only be testing
+values of 1-8 and wouldn't yield any meaningful insights.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#check normality assumptions for KWH and MONEYPY}
+\NormalTok{ancmod}\SpecialCharTok{$}\NormalTok{KWH[ancmod}\SpecialCharTok{$}\NormalTok{KWH }\SpecialCharTok{\textless{}} \DecValTok{1500}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\NormalTok{m1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(KWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ CENACHP }\SpecialCharTok{+}\NormalTok{ MONEYPY, }\AttributeTok{data =}\NormalTok{ ancmod)}
+\FunctionTok{summary}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = KWH ~ CENACHP + MONEYPY, data = ancmod)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -14368  -4766  -1114   3322  49170 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  8443.88     238.16   35.45   <2e-16 ***
+## CENACHPYES   3930.29     248.52   15.81   <2e-16 ***
+## MONEYPY       700.33      49.67   14.10   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 6775 on 3668 degrees of freedom
+## Multiple R-squared:  0.1126, Adjusted R-squared:  0.1121 
+## F-statistic: 232.7 on 2 and 3668 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{myResPlots2}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-16-1.pdf}
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-16-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#note anomalies }
+\NormalTok{m2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(KWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ MONEYPY, }\AttributeTok{data =}\NormalTok{ ancmod)}
+\FunctionTok{summary}\NormalTok{(m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = KWH ~ MONEYPY, data = ancmod)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -13071  -5060  -1374   3584  47950 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   9441.3      237.3   39.78   <2e-16 ***
+## MONEYPY        728.2       51.3   14.20   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 7001 on 3669 degrees of freedom
+## Multiple R-squared:  0.05207,    Adjusted R-squared:  0.05181 
+## F-statistic: 201.5 on 1 and 3669 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{myResPlots2}\NormalTok{(m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-16-3.pdf}
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-16-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Normality assumptions have not been met by the residuals so a transformation needs to be made. A box cox test will indicate what transformation is appropriate for the data. }
+\NormalTok{trans1 }\OtherTok{\textless{}{-}} \FunctionTok{boxCox}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-16-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{boxcoxtrans }\OtherTok{\textless{}{-}}\NormalTok{ trans1}\SpecialCharTok{$}\NormalTok{x[}\FunctionTok{which.max}\NormalTok{(trans1}\SpecialCharTok{$}\NormalTok{y)]}
+\FunctionTok{print}\NormalTok{(boxcoxtrans)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1818182
+\end{verbatim}
+
+\emph{The values in KWH less than 1500 were creating large outliers in
+the dataset, and thus large residuals which were affecting the normality
+of the errors. At the advice of Professor JDRS, a cutoff was imposed on
+values less than 1500. Normality of the model for the first `m1' model
+fitting KWH and CENACHP show evidence of non normality from the normal
+quantile plot which is not linear and evidence of outliers and
+influential points from the residual plots which show a heavy skew of
+positive residuals. This model has a r-squared value of 0.1126, meaning
+11.3\% of the variability of kilowatt-hour usage is explained by the
+presence of a heat pump. The `CENACHP' variable has a lower p-value of
+less than 2e-16 meaning it is a statistically significant predictor of
+kilowatt-hours. The second model `m2' fitting KWH and MONEYPY also show
+similar evidence of non-normality from a non linear and curved normal
+quantile plot and residuals heavily positive skewed showing evidence of
+outliers and influential points. This indicates that the response
+variable needs some transformation. The `m2' model has a r-squared value
+of 0.05207 meaning 5.2\% of the predictability of kilowatt-hour usage
+can be explained by the variable annual gross income or `MONEYPY'. Like
+CENACHP, MONEYPY has a low p-value of less than 2e-16 meaning it is a
+statistically significant predictor. A box cox transformation results in
+a lambda of 0.18 which is close enough to 0 that we can take a log
+transformation. }
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Log Transformation }
+\NormalTok{ancmod}\SpecialCharTok{$}\NormalTok{logKWH }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(ancmod}\SpecialCharTok{$}\NormalTok{KWH)}
+
+\CommentTok{\#check normality assumptions for KWH and CENACHP and KWH and MONEYPY}
+
+\NormalTok{m3 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ CENACHP, }\AttributeTok{data =}\NormalTok{ ancmod)}
+\FunctionTok{summary}\NormalTok{(m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = logKWH ~ CENACHP, data = ancmod)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.17084 -0.35061  0.03312  0.39240  1.88218 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  9.17214    0.01106  829.22   <2e-16 ***
+## CENACHPYES   0.31902    0.02081   15.33   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.5677 on 3669 degrees of freedom
+## Multiple R-squared:  0.06019,    Adjusted R-squared:  0.05993 
+## F-statistic:   235 on 1 and 3669 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{myResPlots2}\NormalTok{(m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-17-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ols\_plot\_cooksd\_bar}\NormalTok{(m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-17-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m4 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ MONEYPY, }\AttributeTok{data =}\NormalTok{ ancmod)}
+\FunctionTok{summary}\NormalTok{(m4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = logKWH ~ MONEYPY, data = ancmod)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.84880 -0.37763  0.03319  0.41159  1.70369 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 9.019167   0.019312  467.03   <2e-16 ***
+## MONEYPY     0.060156   0.004174   14.41   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.5697 on 3669 degrees of freedom
+## Multiple R-squared:  0.05358,    Adjusted R-squared:  0.05332 
+## F-statistic: 207.7 on 1 and 3669 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{myResPlots2}\NormalTok{(m4)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-17-4.pdf}
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-17-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ols\_plot\_cooksd\_bar}\NormalTok{(m4)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-17-6.pdf}
+
+\emph{After transformation, model assumptions have been reasonably met
+after transformation. We manage to fix some of the heteroskedasticity
+and the residual plots are approximately normally distributed with equal
+spread around the 0. The normal quantile plot is approximately linear,
+which shows that transformation has eliminated some heteroskedasticity.
+There are a few extreme outliers though. The cooks bars indicate that
+each model has several points which are outliers, but they are not
+influential points so they aren't influential the model results greatly.
+Additionally, the model has over 3000 points which will still yield
+insight from the data. After the transformation the refitted model `m3'
+of the log transformed KWH and CENACHP has a lower r-squared value of
+0.06019, meaning the predictability of KWH is 6.0\% explained by our
+model. CENACHP is still statistically significant as a predictor. The
+refitted model `m4' of the log transformed KWH and MONEYPY has an
+improved r-squared value of 0.05358 meaning our model can predict 5.4\%
+of KWH with the variable MONEYPY. MONEYPY is still a statistically
+significant predictor. }
+
+\#\#Permutation Test \emph{Our permutation test null hypothesis: there
+is no significant effect to predicting log kilowatt-hours by our
+variables heat pump `CENACHP', gross annual income `MONEYPY', and the
+interaction of heat pumps x gross annual income.}
+
+\emph{The alternative hypothesis: there is a significant effect on
+predicting log kilowatt-hour by the variable for having a heat pump
+`CENACHP'.}
+
+\emph{The alternative hypothesis: there is a significant effect on
+predicting log kilowatt-hour by the variable for gross annual income
+`MONEYPY'.}
+
+\emph{The alternative hypothesis: there is a significant effect on
+predicting log kilowatt-hour by the interactions for having a heat pump
+`CENACHP' and gross annual income `MONEYPY'.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(MONEYPY, CENACHP)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        CENACHP
+## MONEYPY  NO YES
+##       1 316 117
+##       2 559 192
+##       3 409 185
+##       4 383 129
+##       5 266 110
+##       6 235  81
+##       7 149  69
+##       8 317 154
+\end{verbatim}
+
+\emph{The table of MONEYPY and CENACHP verifies that there are variables
+present for every level of the variable.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fitanco }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ MONEYPY }\SpecialCharTok{+}\NormalTok{ CENACHP }\SpecialCharTok{+}\NormalTok{ MONEYPY}\SpecialCharTok{*}\NormalTok{CENACHP, }\AttributeTok{data =}\NormalTok{ ancmod)}
+
+\FunctionTok{Anova}\NormalTok{(fitanco, }\AttributeTok{type =} \DecValTok{3}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Anova Table (Type III tests)
+## 
+## Response: logKWH
+##                 Sum Sq   Df    F value    Pr(>F)    
+## (Intercept)      50482    1 1.6571e+05 < 2.2e-16 ***
+## MONEYPY             33    1 1.0767e+02 < 2.2e-16 ***
+## CENACHP              7    1 2.2513e+01 2.167e-06 ***
+## MONEYPY:CENACHP      3    1 9.1807e+00  0.002463 ** 
+## Residuals         1117 3667                         
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(fitanco)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = logKWH ~ MONEYPY + CENACHP + MONEYPY * CENACHP, 
+##     data = ancmod)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.00406 -0.35731  0.04563  0.38080  1.79088 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)        8.972508   0.022041 407.078  < 2e-16 ***
+## MONEYPY            0.050023   0.004821  10.376  < 2e-16 ***
+## CENACHPYES         0.198088   0.041749   4.745 2.17e-06 ***
+## MONEYPY:CENACHPYES 0.026876   0.008870   3.030  0.00246 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.5519 on 3667 degrees of freedom
+## Multiple R-squared:  0.1121, Adjusted R-squared:  0.1114 
+## F-statistic: 154.3 on 3 and 3667 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{vif}\NormalTok{(fitanco)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         MONEYPY         CENACHP MONEYPY:CENACHP 
+##        1.421048        4.257089        4.758726
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anccoef }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(fitanco)}
+\FunctionTok{plot}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ MONEYPY,}
+     \AttributeTok{main =} \StringTok{"Log of Annual Electricity Use vs. Income by Presence of Heatpump"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Log of Kilowatt{-}Hours"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Income Brackett"}\NormalTok{,}
+     \AttributeTok{data =}\NormalTok{ ancmod, }\AttributeTok{col =} \FunctionTok{factor}\NormalTok{(CENACHP), }\AttributeTok{pch =} \DecValTok{16}\NormalTok{, }\AttributeTok{cex =}\NormalTok{ .}\DecValTok{5}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{col =} \DecValTok{2}\SpecialCharTok{:}\DecValTok{1}\NormalTok{, }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes {-} Heat Pump"}\NormalTok{, }\StringTok{"No {-} Heat Pump"}\NormalTok{), }\AttributeTok{pch =} \DecValTok{16}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{a =}\NormalTok{ anccoef[}\DecValTok{1}\NormalTok{], }\AttributeTok{b =}\NormalTok{ anccoef[}\DecValTok{2}\NormalTok{], }\AttributeTok{col =} \DecValTok{1}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{4.4}\NormalTok{, }\AttributeTok{y =} \FloatTok{7.5}\NormalTok{, }\AttributeTok{col =} \DecValTok{1}\NormalTok{,}
+     \FunctionTok{paste0}\NormalTok{(}\StringTok{"y ="}\NormalTok{, }\FunctionTok{round}\NormalTok{((anccoef[}\DecValTok{1}\NormalTok{]), }\DecValTok{2}\NormalTok{), }\StringTok{"x + "}\NormalTok{, }\FunctionTok{round}\NormalTok{((anccoef[}\DecValTok{2}\NormalTok{]), }\DecValTok{2}\NormalTok{)))}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{a =}\NormalTok{ anccoef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ anccoef[}\DecValTok{3}\NormalTok{], }\AttributeTok{b =}\NormalTok{ anccoef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ anccoef[}\DecValTok{4}\NormalTok{], }\AttributeTok{col =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{4.4}\NormalTok{, }\AttributeTok{y =} \FloatTok{10.8}\NormalTok{, }\AttributeTok{col =} \DecValTok{2}\NormalTok{,}
+     \FunctionTok{paste0}\NormalTok{(}\StringTok{"y ="}\NormalTok{, }\FunctionTok{round}\NormalTok{((anccoef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ anccoef[}\DecValTok{3}\NormalTok{]), }\DecValTok{2}\NormalTok{), }\StringTok{"x + "}\NormalTok{, }\FunctionTok{round}\NormalTok{((anccoef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ anccoef[}\DecValTok{4}\NormalTok{]), }\DecValTok{2}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-19-1.pdf}
+\emph{The final fitted ANCOVA model is the log transformed kilowatt-hour
+variable (logKWH) predicted by annual gross income (MONEYPY), the
+presence of a heat pump (CENACHP), and the interaction of MONEYPY x
+CENACHP. The r-squared of this model improved from our separated
+predictors and our model explains 11.2\% of the predictability of
+transformed kilowatt-hours. Each of the predictors have p-values less
+than our alpha 0.05 meaning they are statistically significant
+predictors. Additionally, the interaction term between MONEYPY and
+CENACHP is statistically significant with a p-value of 0.00246. The
+model indicates that with there is a higher kilowatt usage with a higher
+gross annual income at a rate of (8.97). The presence of a heat pump
+means an increase in kilowatt-hours at a rate of (8.97 + 0.20 = 9.17).
+The presence of a heat pump and a higher annual gross income have a
+increase in kilowatt-hour usage at the rate of (8.97 + 0.02 = 8.99) so
+the effect of the two together is fairly modest. The model has two
+equations fitted. One for the presence of a heat pump and an increase in
+gross annual income which is y = 9.17x + 0.08. The base equation without
+a heat pump and increasing gross annual income is y = 8.97x + 0.05. This
+model rejects the null hypothesis that log transformed KWH is not
+significantly predicted by MONEYPY, CENACHP, and MONEYPY x CENACHP and
+we can conclude that all the variables are significant predictors of log
+KWH.}
+
+\#\#Generalized Linear Model --- Best Subsets Regression
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{myResPlots2}\NormalTok{(}\FunctionTok{lm}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{IncBracket }\SpecialCharTok{\textasciitilde{}}\NormalTok{ cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-20-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{logIncBracket }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{IncBracket)}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{We see in the below residual plots that neither income nor the
+residuals of income for predicting the log of energy use are normally
+distributed. We are not surprised regarding the distribution of income,
+because it is generally expected to be normally distributed only when
+transformed in a log scale, and in this case we only have single lines
+representing income brackets. We therefore go with the standard linear
+transformation generally used for income variables. After the log
+transformation, the income variable was still not normal (due to
+aforementioned single lines representing income brackets), but it was
+much closer and was now more reasonable to work with.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod1 }\OtherTok{\textless{}{-}} \FunctionTok{regsubsets}\NormalTok{(logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ logIncBracket }\SpecialCharTok{+}\NormalTok{ DIVISION }\SpecialCharTok{+}\NormalTok{ UATYP10 }\SpecialCharTok{+}\NormalTok{ KOWNRENT }\SpecialCharTok{+}\NormalTok{ DIVISION}\SpecialCharTok{*}\NormalTok{UATYP10,}
+                   \AttributeTok{data =}\NormalTok{ cleanRECS, }\AttributeTok{nvmax =} \DecValTok{7}\NormalTok{)}
+\NormalTok{mod1sum }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(mod1)}
+\NormalTok{mod1sum}\SpecialCharTok{$}\NormalTok{which[}\DecValTok{1}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                         (Intercept)                       logIncBracket 
+##                                TRUE                               FALSE 
+##          DIVISIONEast South Central                DIVISIONMid Atlantic 
+##                               FALSE                               FALSE 
+##              DIVISIONMountain North              DIVISIONMountain South 
+##                               FALSE                               FALSE 
+##                 DIVISIONNew England                     DIVISIONPacific 
+##                               FALSE                               FALSE 
+##              DIVISIONSouth Atlantic          DIVISIONWest North Central 
+##                               FALSE                               FALSE 
+##          DIVISIONWest South Central                            UATYP10R 
+##                               FALSE                                TRUE 
+##                            UATYP10U                            KOWNRENT 
+##                               FALSE                               FALSE 
+## DIVISIONEast South Central:UATYP10R       DIVISIONMid Atlantic:UATYP10R 
+##                               FALSE                               FALSE 
+##     DIVISIONMountain North:UATYP10R     DIVISIONMountain South:UATYP10R 
+##                               FALSE                               FALSE 
+##        DIVISIONNew England:UATYP10R            DIVISIONPacific:UATYP10R 
+##                               FALSE                               FALSE 
+##     DIVISIONSouth Atlantic:UATYP10R DIVISIONWest North Central:UATYP10R 
+##                               FALSE                               FALSE 
+## DIVISIONWest South Central:UATYP10R DIVISIONEast South Central:UATYP10U 
+##                               FALSE                               FALSE 
+##       DIVISIONMid Atlantic:UATYP10U     DIVISIONMountain North:UATYP10U 
+##                               FALSE                               FALSE 
+##     DIVISIONMountain South:UATYP10U        DIVISIONNew England:UATYP10U 
+##                               FALSE                               FALSE 
+##            DIVISIONPacific:UATYP10U     DIVISIONSouth Atlantic:UATYP10U 
+##                               FALSE                               FALSE 
+## DIVISIONWest North Central:UATYP10U DIVISIONWest South Central:UATYP10U 
+##                               FALSE                               FALSE
+\end{verbatim}
+
+\emph{This model finds that the household's location in a rural area,
+compared to an urban or suburban areas, was the only significant
+predictor of household energy use.}
+
+\emph{To show this visually, the following figure plots median income
+vs.~household energy use on a log-log scale. The trend lines illustrate
+the OLS best fit lines for urban and suburban (combined) households
+vs.~rural households differ significantly only in their y-intercept, but
+not in their slopes. In other words, being in an urban or suburban
+vs.~rural area has a significant effect on household energy use, and
+there is not an interaction effect with median household income.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lm1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ cleanRECS}\SpecialCharTok{$}\NormalTok{logIncBracket}\SpecialCharTok{*}\NormalTok{cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural)}
+\FunctionTok{summary}\NormalTok{(lm1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = cleanRECS$logKWH ~ cleanRECS$logIncBracket * cleanRECS$UrbanRural)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.13828 -0.36151  0.02805  0.38699  1.74603 
+## 
+## Coefficients:
+##                                               Estimate Std. Error t value
+## (Intercept)                                    7.75443    0.42602  18.202
+## cleanRECS$logIncBracket                        0.16082    0.03867   4.158
+## cleanRECS$UrbanRuralU                         -0.79503    0.47164  -1.686
+## cleanRECS$logIncBracket:cleanRECS$UrbanRuralU  0.03919    0.04282   0.915
+##                                               Pr(>|t|)    
+## (Intercept)                                    < 2e-16 ***
+## cleanRECS$logIncBracket                       3.29e-05 ***
+## cleanRECS$UrbanRuralU                            0.092 .  
+## cleanRECS$logIncBracket:cleanRECS$UrbanRuralU    0.360    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.5494 on 3196 degrees of freedom
+##   (471 observations deleted due to missingness)
+## Multiple R-squared:  0.1014, Adjusted R-squared:  0.1005 
+## F-statistic: 120.2 on 3 and 3196 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{coef}\NormalTok{(lm1), }\DecValTok{2}\NormalTok{)}
+
+\CommentTok{\#Plotting the model to show the lack of impact of household income, but impact of housing type.}
+\FunctionTok{plot}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{logKWH }\SpecialCharTok{\textasciitilde{}}\NormalTok{ cleanRECS}\SpecialCharTok{$}\NormalTok{logIncBracket,}
+     \AttributeTok{col =} \FunctionTok{factor}\NormalTok{(cleanRECS}\SpecialCharTok{$}\NormalTok{UrbanRural), }
+     \AttributeTok{pch =} \DecValTok{16}\NormalTok{,}
+     \AttributeTok{cex =}\NormalTok{ .}\DecValTok{5}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Energy Consumption vs. Household Income (Log{-}Log)"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Log of Household Income Bracket ($)"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Log of Energy Consumption (kWh)"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\AttributeTok{col =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Rural"}\NormalTok{, }\StringTok{"Urban"}\NormalTok{), }\AttributeTok{pch =} \DecValTok{16}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{a =}\NormalTok{ coefs[}\DecValTok{1}\NormalTok{], }\AttributeTok{b =}\NormalTok{ coefs[}\DecValTok{2}\NormalTok{], }\AttributeTok{col =} \DecValTok{1}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{a =}\NormalTok{ coefs[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ coefs[}\DecValTok{3}\NormalTok{], }\AttributeTok{b =}\NormalTok{ coefs[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ coefs[}\DecValTok{4}\NormalTok{], }\AttributeTok{col =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{10.25}\NormalTok{, }\AttributeTok{y =} \FloatTok{9.75}\NormalTok{, }\AttributeTok{col =} \DecValTok{1}\NormalTok{,}
+     \FunctionTok{paste0}\NormalTok{(}\StringTok{"Slope = "}\NormalTok{, coefs[}\DecValTok{2}\NormalTok{]))}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{10.25}\NormalTok{, }\AttributeTok{y =} \FloatTok{8.5}\NormalTok{, }\AttributeTok{col =} \DecValTok{2}\NormalTok{,}
+     \FunctionTok{paste0}\NormalTok{(}\StringTok{"Slope = "}\NormalTok{, coefs[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ coefs[}\DecValTok{4}\NormalTok{]))}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{10.25}\NormalTok{, }\AttributeTok{y =} \FloatTok{8.15}\NormalTok{, }\AttributeTok{col =} \DecValTok{2}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\StringTok{"but, p ≈ "}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{summary}\NormalTok{(lm1)}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{], }\DecValTok{2}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", :
+## conversion failure on 'but, p ≈ 0.36' in 'mbcsToSbcs': dot substituted for <e2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", :
+## conversion failure on 'but, p ≈ 0.36' in 'mbcsToSbcs': dot substituted for <89>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", :
+## conversion failure on 'but, p ≈ 0.36' in 'mbcsToSbcs': dot substituted for <88>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", : font
+## metrics unknown for Unicode character U+2248
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{10.95}\NormalTok{, }\AttributeTok{y =} \DecValTok{6}\NormalTok{, }\AttributeTok{col =} \DecValTok{1}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\StringTok{"Rural energy use tends to be"}\NormalTok{))}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{10.95}\NormalTok{, }\AttributeTok{y =} \FloatTok{5.65}\NormalTok{, }\AttributeTok{col =} \DecValTok{1}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\StringTok{"higher than urban, p{-}value ≈ "}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{summary}\NormalTok{(lm1)}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{], }\DecValTok{5}\NormalTok{), }\StringTok{","}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.95, y = 5.65, col = 1, paste0("higher than urban,
+## p-value ≈ ", : conversion failure on 'higher than urban, p-value ≈ 3e-05,' in
+## 'mbcsToSbcs': dot substituted for <e2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.95, y = 5.65, col = 1, paste0("higher than urban,
+## p-value ≈ ", : conversion failure on 'higher than urban, p-value ≈ 3e-05,' in
+## 'mbcsToSbcs': dot substituted for <89>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.95, y = 5.65, col = 1, paste0("higher than urban,
+## p-value ≈ ", : conversion failure on 'higher than urban, p-value ≈ 3e-05,' in
+## 'mbcsToSbcs': dot substituted for <88>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in text.default(x = 10.95, y = 5.65, col = 1, paste0("higher than urban,
+## p-value ≈ ", : font metrics unknown for Unicode character U+2248
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \FloatTok{10.95}\NormalTok{, }\AttributeTok{y =} \FloatTok{5.30}\NormalTok{, }\AttributeTok{col =} \DecValTok{1}\NormalTok{, }\StringTok{"for households of similar incomes."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_project_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\end{document}
