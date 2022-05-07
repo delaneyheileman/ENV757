@@ -25,12 +25,10 @@ library(tidyverse)
 library(ggplot2)
 source("http://www.reuningscherer.net/s&ds230/Rfuncs/regJDRS.txt")
 
-
 #Setting working directory 
 #setwd("/Users/delaneyheileman/Documents/school/Yale/Spring 2022/data/ENV757")#
 setwd("/Users/liamgunn/Documents/School/Graduate School/Yale Forestry/Spring 2022/Data Exploration & Analysis/Data Analysis Final Project/ENV757")
 #setwd("/Users/elain/Documents/GitHub/ENV757")
-
 ```
 
 #Loading Data 
@@ -93,7 +91,6 @@ DOLLARLP & Dollars spent on liquid petroleum\\
 DOLLARFO & Dollars spent on other fuels\\
 \hline
 \end{tabular}
-
 
 #Data Cleaning
 
@@ -163,29 +160,6 @@ cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY, '1' = '20000', '2' 
 ```
 *After the log transformation the KWH variable was still not perfectly normal but it was much closer and was now more reasonable to work with.*
 
-#General Graphics
-
-*To better understand our data set we created various graphics. This helped us visualize what information was being conveyed and what would be interesting to examine more in depth.*
-
-```{r, include=FALSE}
-#KWH based on census region
-boxplot(KWH ~ REGIONC, data = cleanRECS, col = terrain.colors(length(unique(cleanRECS$REGIONC))), main = "Kilowatt-Hours vs. Census Region", xlab = "Census Region", ylab = "Kilowatt-Hours")
-mean <- round(tapply(cleanRECS$KWH,cleanRECS$REGIONC, mean),0)
-points(mean, col = 'red', pch = 19, cex = 1.2)
-text(x = c(1:length(unique(cleanRECS$REGIONC))), y = mean, labels = round(mean, 2))
-mtext("Here we see that most regions have similar energy use patterns, besides the south which has a  higher annual mean household energy consumption.", side = 1, line = 4, cex = 0.6)
-
-#KWH Urban v. Rural 
-boxplot(KWH ~ UrbanRural, data = cleanRECS, col = terrain.colors(length(unique(cleanRECS$UrbanRural))), main = "Kilowatt-Hours vs. Urban/Rural Divide", xlab = "Rural v. Urban", ylab = "Kilowatt-Hours")
-mean <- round(tapply(cleanRECS$KWH,cleanRECS$UrbanRural, mean),0)
-points(mean, col = 'red', pch = 19, cex = 1.2)
-text(x = c(1:length(unique(cleanRECS$UrbanRural))), y = mean, labels = round(mean, 2))
-mtext("Rural households seem to have higher annual energy consumption.", side = 1, line = 4, cex = 0.8)
-
-#KWH v. Annual Cost
-plot(cleanRECS$KWH, cleanRECS$DOLLAREL, main = "Kilowatt-Hours vs. Electricty Expenditure", xlab = "Kilowatt-Hours (by household)", ylab = "Electricty Expenditure", col = "blue")
-
-```
 # T-Test 
 
 *After playing around with the data it looked like a t-test based on Kilowatt-Hours based on Rural v. Urban would be interesting. In our data cleaning we already created a logKWH variable, to account for normalcy, so that is what we will be using. We began by looking at a boxplot of the log transformed data* 
