@@ -106,63 +106,31 @@ cleanRECS <- recs1[recs1$THERMAIN != -2 & recs1$THERMAINAC != "-2",]
 *We started by removing thermostat values that were "-2" which are coded as "N/A" in the code book. We decided to remove these values because we were only interested in the binary of if someone does or does not have a thermostat.* 
 
 ```{r}
-boxplot(KWH ~ UATYP10,
-        data = cleanRECS,
-        col = terrain.colors(length(unique(cleanRECS$UATYP10))),
-        xlab = "Rural, Urban, & Suburban",
-        ylab = "Kilowatt-Hours",
-        main = "Annual Electricity Use by Home Type")
+boxplot(KWH ~ UATYP10, data = cleanRECS, col = terrain.colors(length(unique(cleanRECS$UATYP10))), xlab = "Rural, Urban, & Suburban", ylab = "Kilowatt-Hours", main = "Annual Electricity Use by Home Type")
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$UATYP10, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$UATYP10))), y = mean, labels = round(mean, 2))
-
 table(cleanRECS$UATYP10)
 
 cleanRECS$UrbanRural <- recode(cleanRECS$UATYP10, 'C' = 'U')
-
-cleanRECS$HeatOrEat <- as.factor(recode(cleanRECS$SCALEB, 
-                              '2' = '1',
-                              '3' = '1',
-                              '1' = '1', 
-                              '0' = '0'))
+cleanRECS$HeatOrEat <- as.factor(recode(cleanRECS$SCALEB,  '2' = '1', '3' = '1', '1' = '1', '0' = '0'))
 ```
 *We then looked at the UATYP10 variable, which indicated if a home is located in a Urban, Suburban, or Rural setting. We decided to create a new variable called UrbanRural which re-coded all suburban values as urban. We did this because we thought the binary Rural v. Non-rural would be interesting to explore and because the suburban and urban values were very similar. We also created a new category called HeatOrEat to capture instances of energy poverty. The HeatOrEat variable is now binary and shows if a household has gone without necessities at any point during the year in order to afford utility bills.*
 
 ```{r}
-cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC,
-                             '1' = 'Northeast',
-                             '2' = 'Midwest',
-                             '3' = 'South',
-                             '4' = 'West'))
+cleanRECS$REGIONC <- as.factor(recode(cleanRECS$REGIONC, '1' = 'Northeast', '2' = 'Midwest', '3' = 'South', '4' = 'West'))
 
-cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION,
-                              '1' = 'New England',
-                              '2' = 'Mid Atlantic',
-                              '3' = 'East North Central',
-                              '4' = 'West North Central',
-                              '5' = 'South Atlantic',
-                              '6' = 'East South Central',
-                              '7' = 'West South Central',
-                              '8' = 'Mountain North',
-                              '9' = 'Mountain South',
-                              '10'= 'Pacific'))
+cleanRECS$DIVISION <- as.factor(recode(cleanRECS$DIVISION, '1' = 'New England', '2' = 'Mid Atlantic', '3' = 'East North Central', '4' = 'West North Central', '5' = 'South Atlantic', '6' = 'East South Central', '7' = 'West South Central', '8' = 'Mountain North', '9' = 'Mountain South', '10'= 'Pacific'))
 
-cleanRECS$CENACHP <- recode(cleanRECS$CENACHP,
-                            '1' = 'YES',
-                            '0' = 'NO')
+cleanRECS$CENACHP <- recode(cleanRECS$CENACHP, '1' = 'YES', '0' = 'NO')
+
 #recoding energy assistance variable to yes or no value
-cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST,
-                            '1' = 'YES',
-                            '0' = 'NO')
+cleanRECS$ENERGYASST <- recode(cleanRECS$ENERGYASST, '1' = 'YES', '0' = 'NO')
 ```
 *We then re-coded some of our values with names to so that future graphics would be more legible*
 
 ```{r}
-hist(cleanRECS$KWH,
-     col = "salmon",
-     main = "Distribution of Annual Electricty Use",
-     xlab = "Kilowatt-hours",
-     breaks = 200)
+hist(cleanRECS$KWH, col = "salmon", main = "Distribution of Annual Electricty Use", xlab = "Kilowatt-hours", breaks = 200)
 
 qqPlot(cleanRECS$KWH)
 ```
@@ -177,11 +145,7 @@ cleanRECS <- na.omit(cleanRECS)
 #cleanRECS$KWH[cleanRECS$KWH > 55000] <- NA
 #cleanRECS <- na.omit(cleanRECS)
 
-hist(cleanRECS$KWH,
-     col = "salmon",
-     main = "Distribution of Annual Electricty Use",
-     xlab = "kilowatt-hours",
-     breaks = 150)
+hist(cleanRECS$KWH, col = "salmon", main = "Distribution of Annual Electricty Use", xlab = "kilowatt-hours", breaks = 150)
 
 qqPlot(cleanRECS$KWH)
 ```
@@ -190,24 +154,12 @@ qqPlot(cleanRECS$KWH)
 ```{r}
 cleanRECS$logKWH <- log(cleanRECS$KWH)
 
-hist(cleanRECS$logKWH,
-     col = "salmon",
-     main = "Distribution of Log Annual Electricty Use",
-     xlab = "log kilowatt-hours",
-     breaks = 150)
+hist(cleanRECS$logKWH, col = "salmon", main = "Distribution of Log Annual Electricty Use", xlab = "log kilowatt-hours", breaks = 150)
 
 qqPlot(cleanRECS$logKWH)
 
 #Converting the Income Brackets into a numeric variable. Because we do not know the exact variables, we are assuming that each household is at the upper limit of that income bracket, and removing the highest income bracket that has no upper limit to avoid making unbounded assumptions about their incomes.
-cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
-                             '1' = '20000',
-                             '2' = '40000',
-                             '3' = '60000',
-                             '4' = '80000',
-                             '5' = '100000',
-                             '6' = '120000',
-                             '7' = '140000',
-                             '8' = 'NA'))
+cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY, '1' = '20000', '2' = '40000', '3' = '60000', '4' = '80000', '5' = '100000', '6' = '120000', '7' = '140000', '8' = 'NA'))
 ```
 *After the log transformation the KWH variable was still not perfectly normal but it was much closer and was now more reasonable to work with.*
 
@@ -217,35 +169,21 @@ cleanRECS$IncBracket <- as.numeric(recode(cleanRECS$MONEYPY,
 
 ```{r, include=FALSE}
 #KWH based on census region
-boxplot(KWH ~ REGIONC,
-        data = cleanRECS,
-        col = terrain.colors(length(unique(cleanRECS$REGIONC))),
-        main = "Kilowatt-Hours vs. Census Region",
-        xlab = "Census Region",
-        ylab = "Kilowatt-Hours")
+boxplot(KWH ~ REGIONC, data = cleanRECS, col = terrain.colors(length(unique(cleanRECS$REGIONC))), main = "Kilowatt-Hours vs. Census Region", xlab = "Census Region", ylab = "Kilowatt-Hours")
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$REGIONC, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$REGIONC))), y = mean, labels = round(mean, 2))
 mtext("Here we see that most regions have similar energy use patterns, besides the south which has a  higher annual mean household energy consumption.", side = 1, line = 4, cex = 0.6)
 
 #KWH Urban v. Rural 
-boxplot(KWH ~ UrbanRural,
-        data = cleanRECS,
-        col = terrain.colors(length(unique(cleanRECS$UrbanRural))),
-        main = "Kilowatt-Hours vs. Urban/Rural Divide",
-        xlab = "Rural v. Urban",
-        ylab = "Kilowatt-Hours")
+boxplot(KWH ~ UrbanRural, data = cleanRECS, col = terrain.colors(length(unique(cleanRECS$UrbanRural))), main = "Kilowatt-Hours vs. Urban/Rural Divide", xlab = "Rural v. Urban", ylab = "Kilowatt-Hours")
 mean <- round(tapply(cleanRECS$KWH,cleanRECS$UrbanRural, mean),0)
 points(mean, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(cleanRECS$UrbanRural))), y = mean, labels = round(mean, 2))
 mtext("Rural households seem to have higher annual energy consumption.", side = 1, line = 4, cex = 0.8)
 
 #KWH v. Annual Cost
-plot(cleanRECS$KWH, cleanRECS$DOLLAREL,
-     main = "Kilowatt-Hours vs. Electricty Expenditure",
-     xlab = "Kilowatt-Hours (by household)",
-     ylab = "Electricty Expenditure",
-     col = "blue")
+plot(cleanRECS$KWH, cleanRECS$DOLLAREL, main = "Kilowatt-Hours vs. Electricty Expenditure", xlab = "Kilowatt-Hours (by household)", ylab = "Electricty Expenditure", col = "blue")
 
 ```
 # T-Test 
@@ -253,13 +191,7 @@ plot(cleanRECS$KWH, cleanRECS$DOLLAREL,
 *After playing around with the data it looked like a t-test based on Kilowatt-Hours based on Rural v. Urban would be interesting. In our data cleaning we already created a logKWH variable, to account for normalcy, so that is what we will be using. We began by looking at a boxplot of the log transformed data* 
 
 ```{r}
-boxplot(logKWH ~ UrbanRural,
-        main = "Log of Annual Electricty Use vs. Urban/Rural Divide",
-        ylab = "Log of Kilowatt-Hours",
-        data = cleanRECS,
-        col = as.factor(cleanRECS$logKWH),
-        xlab = "Rural vs. Urban",
-        cex.main = 0.85)
+boxplot(logKWH ~ UrbanRural, main = "Log of Annual Electricty Use vs. Urban/Rural Divide", ylab = "Log of Kilowatt-Hours", data = cleanRECS, col = as.factor(cleanRECS$logKWH), xlab = "Rural vs. Urban", cex.main = 0.85)
 ```
 
 *Null hypothesis: There is no difference in KWH usage between the rural and urban groups.*
@@ -287,11 +219,8 @@ sU <- rep(NA, N)
 diffvals <- rep(NA, N)
 
 for (i in 1:N) {
-  sR <- sample(cleanRECS$logKWH[cleanRECS$UrbanRural == "R"],
-               sum(cleanRECS$UrbanRural == "R"), replace = TRUE)
-
-  sU <- sample(cleanRECS$logKWH[cleanRECS$UrbanRural == "U"],
-               sum(cleanRECS$UrbanRural == "U"), replace = TRUE)
+  sR <- sample(cleanRECS$logKWH[cleanRECS$UrbanRural == "R"], sum(cleanRECS$UrbanRural == "R"), replace = TRUE)
+  sU <- sample(cleanRECS$logKWH[cleanRECS$UrbanRural == "U"], sum(cleanRECS$UrbanRural == "U"), replace = TRUE)
 diffvals[i] <- mean((sR)) - mean((sU))
 }
 
@@ -302,21 +231,12 @@ round(ci, 2)
 print("Original Confidence Intervals")
 round(test1$conf.int,2)
 
-hist(diffvals, 
-     col = "blue", 
-     main = "Bootstrapped Sample Means Diff in Annual Electricity Use", 
-     xlab = "Kilowatt-hours", 
-     breaks = 50,
-     cex.main = 0.9)
+hist(diffvals, col = "blue",  main = "Bootstrapped Sample Means Diff in Annual Electricity Use",  xlab = "Kilowatt-hours",  breaks = 50, cex.main = 0.9)
 
 #Add lines to histogram for CI's
 abline(v = ci, lwd=3, col="red")
 abline(v = test1$conf.int, lwd = 3, col = "green", lty = 2)
-legend("topleft", 
-       c("Original CI","Boot CI"), 
-       lwd = 3, 
-       col = c("green","red"), 
-       lty = c(2,1))
+legend("topleft",  c("Original CI","Boot CI"),  lwd = 3,  col = c("green","red"),  lty = c(2,1))
 ```
 *Our bootstrapped confidence interval is nearly identical to the original confidence interval, further supporting our rejection of the null hypothesis.*
 
@@ -331,13 +251,7 @@ rm(mean)
 
 fakeregion <- sample(cleanRECS$UrbanRural) # default is replace = FALSE - this is a PERMUTATION (a reordering) of the age group assignments
 sample(1:10)
-fakeregion
-
-boxplot(cleanRECS$logKWH ~ fakeregion,
-        main = "Log of Kilowatt-Hours by Fake Regions",
-        col = "green",
-        ylab = "Log of Kilowatt-Hours",
-        xlab = "Fake Regions")
+boxplot(cleanRECS$logKWH ~ fakeregion, main = "Log of Kilowatt-Hours by Fake Regions", col = "green", ylab = "Log of Kilowatt-Hours", xlab = "Fake Regions")
 
 diff0 <- mean(cleanRECS$logKWH[fakeregion == "R"]) - mean(cleanRECS$logKWH[fakeregion == "U"])
 
@@ -350,12 +264,7 @@ for (i in 1:N) {
 }
 
 #Make histogram of permuted mean differences
-hist(diffvals2,
-     col = "yellow",
-     main = "Permuted Sample Means Diff in Log of Annual Electricty Use",
-     xlab = "Log of Kilowatt-Hours",
-     breaks = 50,
-     cex.main = 0.9)
+hist(diffvals2, col = "yellow", main = "Permuted Sample Means Diff in Log of Annual Electricty Use", xlab = "Log of Kilowatt-Hours", breaks = 50, cex.main = 0.9)
 abline(v = actualdiff, col = "blue", lwd = 3)
 text(actualdiff - 0.2, 100 , paste("Actual Diff in Log of Kilowatt-Hours =", round(actualdiff,2)),srt = 90)
 ```
@@ -396,35 +305,17 @@ str(ancmod)
 #Create initial exploratory boxplots and scatterplots to determine whether the spread and the means of the data indicate similar variance or evidence of related variables. Only a scatterplot is made for KWH vs. MONEYPY because they are the only continuous variables.  
 
 attach(ancmod)
-boxplot(KWH ~ MONEYPY,
-        data = ancmod,
-        col = terrain.colors(length(unique(ancmod$MONEYPY))),
-        xlab = "Annual Gross Income",
-        ylab = "Kilowatt-Hours",
-        main = "Annual Household Energy Use by Income")
+boxplot(KWH ~ MONEYPY, data = ancmod, col = terrain.colors(length(unique(ancmod$MONEYPY))), xlab = "Annual Gross Income", ylab = "Kilowatt-Hours", main = "Annual Household Energy Use by Income")
 means1 <- round(tapply(KWH, MONEYPY, mean),1)
 points(means1, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:8), y = means1, labels = round(means1, 2))
 
-boxplot(KWH ~ CENACHP,
-        data = ancmod,
-        col = c("red3", "green3"),
-        xlab = "Heat Pump",
-        ylab = "Kilowatt-Hours",
-        main = "Annual Household Energy Use by Heatpump or None",
-        cex.main = 0.85)
+boxplot(KWH ~ CENACHP, data = ancmod, col = c("red3", "green3"), xlab = "Heat Pump", ylab = "Kilowatt-Hours", main = "Annual Household Energy Use by Heatpump or None", cex.main = 0.85)
 means2 <- round(tapply(KWH,CENACHP, mean),1)
 points(means1, col = 'red', pch = 19, cex = 1.2)
 text(x = c(1:length(unique(ancmod$MONEYPY))), y = means2, labels = round(means2, 2))
 
-plot(KWH ~ MONEYPY,
-     data = ancmod,
-     col = "plum4",
-     pch = 21,
-     xlab = "Annual Gross Income",
-     main = "Scatterplot of Kilowatt-Hours vs. Annual Gross Income",
-     ylab = "Kilowatt-Hours",
-     cex.main = 0.9)
+plot(KWH ~ MONEYPY, data = ancmod, col = "plum4", pch = 21, xlab = "Annual Gross Income", main = "Scatterplot of Kilowatt-Hours vs. Annual Gross Income", ylab = "Kilowatt-Hours", cex.main = 0.9)
 ```
 *The initial boxplots indicate that kilowatt-hour means vary across annual gross income, and that kilowatt-hour means may vary between having or not having a heat pump. The spreads of annual gross income and the presence of a heat pump aren't vastly different. However, boxplots are not a true indication of interactions occurring between variables so other tests need to be completed to verify interactions.* 
 
@@ -457,7 +348,6 @@ myResPlots2(m2)
 trans1 <- boxCox(m1)
 boxcoxtrans <- trans1$x[which.max(trans1$y)]
 print(boxcoxtrans)
-
 ```
 *The values in KWH less than 1500 were creating large outliers in the dataset, and thus large residuals which were affecting the normality of the errors. At the advice of Professor JDRS, a cutoff was imposed on values less than 1500. Normality of the model for the first 'm1' model fitting  KWH and CENACHP show evidence of non normality from the normal quantile plot which is not linear and evidence of outliers and influential points from the residual plots which show a heavy skew of positive residuals. This model has a r-squared value of 0.1126, meaning 11.3% of the variability of kilowatt-hour usage is explained by the presence of a heat pump. The 'CENACHP' variable has a lower p-value of less than 2e-16 meaning it is a statistically significant predictor of kilowatt-hours. The second model 'm2' fitting KWH and MONEYPY also show similar evidence of non-normality from a non linear and curved normal quantile plot and residuals heavily positive skewed showing evidence of outliers and influential points. This indicates that the response variable needs some transformation. The 'm2' model has a r-squared value of 0.05207 meaning 5.2% of the predictability of kilowatt-hour usage can be explained by the variable annual gross income or 'MONEYPY'. Like CENACHP, MONEYPY has a low p-value of less than 2e-16 meaning it is a statistically significant predictor. A box cox transformation results in a lambda of 0.18 which is close enough to 0 that we can take a log transformation. *
 
@@ -506,22 +396,12 @@ summary(fitanco)
 vif(fitanco)
 
 anccoef <- coef(fitanco)
-plot(logKWH ~ MONEYPY,
-     main = "Log of Annual Electricity Use vs. Income by Presence of Heatpump",
-     ylab = "Log of Kilowatt-Hours",
-     xlab = "Income Brackett",
-     data = ancmod,
-     col = factor(CENACHP),
-     pch = 16,
-     cex = .5,
-     cex.main = 0.85)
+plot(logKWH ~ MONEYPY, main = "Log of Annual Electricity Use vs. Income by Presence of Heatpump", ylab = "Log of Kilowatt-Hours", xlab = "Income Brackett", data = ancmod, col = factor(CENACHP), pch = 16, cex = .5, cex.main = 0.85)
 legend("topright", col = 2:1, legend = c("Yes - Heat Pump", "No - Heat Pump"), pch = 16)
 abline(a = anccoef[1], b = anccoef[2], col = 1, lwd = 3)
-text(x = 6.5, y = 7.5, col = 1,
-     paste0("y =", round((anccoef[1]), 2), "x + ", round((anccoef[2]), 2)))
+text(x = 6.5, y = 7.5, col = 1, paste0("y =", round((anccoef[1]), 2), "x + ", round((anccoef[2]), 2)))
 abline(a = anccoef[1] + anccoef[3], b = anccoef[2] + anccoef[4], col = 2, lwd = 3)
-text(x = 2.25, y = 11, col = 2,
-     paste0("y =", round((anccoef[1] + anccoef[3]), 2), "x + ", round((anccoef[2] + anccoef[4]), 2)))
+text(x = 2.25, y = 11, col = 2, paste0("y =", round((anccoef[1] + anccoef[3]), 2), "x + ", round((anccoef[2] + anccoef[4]), 2)))
 ```
 *The final fitted ANCOVA model is the log transformed kilowatt-hour variable (logKWH) predicted by annual gross income (MONEYPY), the presence of a heat pump (CENACHP), and the interaction of MONEYPY x CENACHP. The r-squared of this model improved from our separated predictors and our model explains 11.2% of the predictability of transformed kilowatt-hours. Each of the predictors have p-values less than our alpha 0.05 meaning they are statistically significant predictors. Additionally, the interaction term between MONEYPY and CENACHP is statistically significant with a p-value of  0.00246. The model indicates that with there is a higher kilowatt usage with a higher gross annual income at a rate of (8.97). The presence of a heat pump means an increase in kilowatt-hours at a rate of (8.97 +  0.20 = 9.17). The presence of a heat pump and a higher annual gross income have a increase in kilowatt-hour usage at the rate of (8.97 +  0.02 = 8.99) so the effect of the two together is fairly modest. The model has two equations fitted. One for the presence of a heat pump and an increase in gross annual income which is y = 9.17x + 0.08. The base equation without a heat pump and increasing gross annual income is  y = 8.97x + 0.05. This model rejects the null hypothesis that log transformed KWH is not significantly predicted by MONEYPY, CENACHP, and MONEYPY x CENACHP and we can conclude that all the variables are significant predictors of log KWH.* 
 
@@ -534,8 +414,7 @@ cleanRECS$logIncBracket <- log(cleanRECS$IncBracket)
 *We see in the below residual plots that neither income nor the residuals of income for predicting the log of energy use are normally distributed. We are not surprised regarding the distribution of income, because it is generally expected to be normally distributed only when transformed in a log scale, and in this case we only have single lines representing income brackets. We therefore go with the standard linear transformation generally used for income variables. After the log transformation, the income variable was still not normal (due to aforementioned single lines representing income brackets), but it was much closer and was now more reasonable to work with.*
 
 ```{r}
-mod1 <- regsubsets(logKWH ~ logIncBracket + DIVISION + UATYP10 + KOWNRENT + DIVISION*UATYP10,
-                   data = cleanRECS, nvmax = 7)
+mod1 <- regsubsets(logKWH ~ logIncBracket + DIVISION + UATYP10 + KOWNRENT + DIVISION*UATYP10, data = cleanRECS, nvmax = 7)
 mod1sum <- summary(mod1)
 mod1sum$which[1, ]
 ```
@@ -549,22 +428,13 @@ lm1 <- lm(cleanRECS$logKWH ~ cleanRECS$logIncBracket*cleanRECS$UrbanRural)
 summary(lm1)
 coefs <- round(coef(lm1), 2)
 
-#Plotting the model to show the lack of impact of household income, but impact of housing type.
-plot(cleanRECS$logKWH ~ cleanRECS$logIncBracket,
-     col = factor(cleanRECS$UrbanRural), 
-     pch = 16,
-     cex = .5,
-     main = "Energy Consumption vs. Household Income (Log-Log)",
-     xlab = "Log of Household Income Bracket ($)",
-     ylab = "Log of Energy Consumption (kWh)",
-     cex.main = 0.9)
+#Plotting the model to show the lack of impact of household income, but impact of neighborhood type.
+plot(cleanRECS$logKWH ~ cleanRECS$logIncBracket, col = factor(cleanRECS$UrbanRural),  pch = 16, cex = .5, main = "Energy Consumption vs. Household Income (Log-Log)", xlab = "Log of Household Income Bracket ($)", ylab = "Log of Energy Consumption (kWh)", cex.main = 0.9)
 legend("topleft", col = 1:5, legend = c("Rural", "Urban"), pch = 16)
 abline(a = coefs[1], b = coefs[2], col = 1, lwd = 3)
 abline(a = coefs[1] + coefs[3], b = coefs[2] + coefs[4], col = 2, lwd = 3)
-text(x = 10.25, y = 9.75, col = 1,
-     paste0("Slope = ", coefs[2]))
-text(x = 10.25, y = 8.5, col = 2,
-     paste0("Slope = ", coefs[2] + coefs[4]))
+text(x = 10.25, y = 9.75, col = 1, paste0("Slope = ", coefs[2]))
+text(x = 10.25, y = 8.5, col = 2, paste0("Slope = ", coefs[2] + coefs[4]))
 text(x = 10.25, y = 8.15, col = 2, paste0("but, p ≈ ", round(summary(lm1)$coefficients[4, 4], 2)))
 text(x = 10.95, y = 6, col = 1, paste0("Rural energy use tends to be"))
 text(x = 10.95, y = 5.65, col = 1, paste0("higher than urban, p-value ≈ ", round(summary(lm1)$coefficients[2, 4], 5), ","))
